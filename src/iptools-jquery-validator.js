@@ -32,7 +32,7 @@
 
     this.element = element;
     this.$element = $(element);
-    this.options = $.extend({}, defaults, options);
+    this.settings = $.extend({}, defaults, options);
     this._defaults = defaults;
     this._name = pluginName;
 
@@ -174,8 +174,8 @@
 
     _publishError: function(field, message) {
 
-      $(field).addClass(this.options.errorClass).parent().addClass(this.options.errorClass);
-      var $span = $('<span></span>').addClass(this.options.errorClass).text(message);
+      $(field).addClass(this.settings.errorClass).parent().addClass(this.settings.errorClass);
+      var $span = $('<span></span>').addClass(this.settings.errorClass).text(message);
       $(field).parent().append($span);
 
     },
@@ -183,8 +183,8 @@
     _cleanErrors: function() {
 
       var validatedElements = this.$element.find('*[data-validation]');
-      validatedElements.removeClass(this.options.errorClass).parent().removeClass(this.options.errorClass);
-      validatedElements.siblings('span.' + this.options.errorClass).remove();
+      validatedElements.removeClass(this.settings.errorClass).parent().removeClass(this.settings.errorClass);
+      validatedElements.siblings('span.' + this.settings.errorClass).remove();
 
     },
 
@@ -250,7 +250,7 @@
                 msg = $(this).attr('data-errormessage-required');
                 self._publishError(this, msg);
                 errors.push({field: this, error: msg});
-                if (self.options.stopOnRequired) {
+                if (self.settings.stopOnRequired) {
                   break validationIteration;
                 }
               }
@@ -326,6 +326,10 @@
 
       return errors;
 
+    },
+
+    destroy: function() {
+      this.$element.removeData('plugin_' + pluginName);
     }
 
   };
