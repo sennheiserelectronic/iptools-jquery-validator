@@ -1,7 +1,7 @@
 {
-  "name": "iptools-jquery-charcounter",
-  "description": "jQuery textarea character count / limit plugin",
-  "main": "src/iptools-jquery-charcounter.js",
+  "name": "iptools-jquery-validator",
+  "description": "jQuery form validation plugin",
+  "main": "src/iptools-jquery-validator.js",
   "version": "0.0.1",
   "license": "GPL-3.0",
   "ignore": [
@@ -20,6 +20,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/interactive-pioneers/iptools-jquery-charcounter.git"
+    "url": "https://github.com/interactive-pioneers/iptools-jquery-validator.git"
   }
 }

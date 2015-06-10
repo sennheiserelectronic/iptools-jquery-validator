@@ -24,14 +24,14 @@ module.exports = function(grunt) {
     watch: {
       qa: {
         files: [
-          '<%= yeoman.src %>/iptools-jquery-charcounter.js',
+          '<%= yeoman.src %>/iptools-jquery-validator.js',
           'test/spec/test.js'
         ],
         tasks: ['concurrent:qa']
       },
       bdd: {
         files: [
-          '<%= yeoman.src %>/iptools-jquery-charcounter.js',
+          '<%= yeoman.src %>/iptools-jquery-validator.js',
           'test/spec/test.js'
         ],
         tasks: ['test']
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dist/iptools-jquery-charcounter.min.js': 'src/iptools-jquery-charcounter.js'
+          'dist/iptools-jquery-validator.min.js': 'src/iptools-jquery-validator.js'
         }
       }
     },
@@ -92,7 +92,7 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         files: {
-          'dist/iptools-jquery-charcounter.css' : 'src/iptools-jquery-charcounter.scss'
+          'dist/iptools-jquery-validator.css' : 'src/iptools-jquery-validator.scss'
         }
       }
     }
