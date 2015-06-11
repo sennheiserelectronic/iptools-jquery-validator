@@ -1,9 +1,6 @@
 # iptools-jquery-validator [![Build Status](http://img.shields.io/travis/interactive-pioneers/iptools-jquery-validator.svg)](https://travis-ci.org/interactive-pioneers/iptools-jquery-validator)
 
-jQuery textarea character count / limit plugin
-
-## Features
-Displays the remaining characters and limits input to a maximum length.
+jQuery form validation plugin
 
 ## Requirements
 
@@ -12,11 +9,19 @@ Displays the remaining characters and limits input to a maximum length.
 ## Example
 
 ```html
+<form method="post" action="">
+  <input type="text" data-validate="required,email" data-validation-trigger="change" data-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
+</form>
+
 <script src="src/iptools-jquery-validator.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    $('input, textarea').iptValidator({
-      // options
+    $('form').iptValidator({
+      triggerOnSubmit: true,
+      stopOnRequired: false,
+      errorPublishingMode: 'insertAfterField',
+      errorMsgContainerID: null,
+      errorClass: 'error'
     });
   });
 </script>
