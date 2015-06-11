@@ -20,14 +20,26 @@
    *
    * @type Object.
    *
-   * {Boolean} stopOnRequired Stop validation process on required error.
-   * {String} errorClass Class name of the error to inject to erroneous field.
+   * {boolean} triggerOnSubmit - trigger validation on form submission.
+   * {boolean} stopOnRequired - stop validation process on required error.
+   * {string} errorPublishingMode - appendToParent, prependToParent, insertAfterField, insertBeforeField, insertIntoTarget.
+   * {string} errorMsgContainerID - id of an element, that should contain all error messages (errorPublishingMode = insertIntoTarget).
+   * {string} errorClass - class to be added to erroneous fields.
    */
   var defaults = {
+    triggerOnSubmit: true,
     stopOnRequired: false,
+    errorPublishingMode: 'appendToParent',
+    errorMsgContainerID: null,
     errorClass: 'error'
   };
 
+  /**
+   * IPTValidator
+   * @constructor
+   * @param {Object} element - jQuery element
+   * @param {Object} options - plugin options
+   */
   function IPTValidator(element, options) {
 
     this.element = element;
@@ -36,18 +48,58 @@
     this._defaults = defaults;
     this._name = pluginName;
 
+    this._errors = [];
+    this._addEventListeners();
+
   }
 
   IPTValidator.prototype = {
 
+    /**
+     * Checks if string is empty / contains nothing or only whitespace.
+     *
+     * @param {string} str
+     * @returns {boolean} true if string is empty, false otherwise
+     */
     _isEmpty: function(str) {
       return str.replace(' ', '').length === 0;
     },
 
+    /**
+     * Determine if field is filled in or considered empty.
+     * Input text fields have to contain a string value to be considered as filled in.
+     * Checkbox fields have to be checked to be considered as filled in.
+     *
+     * @param {jQuery} $field - jQuery element to be considered for validation.
+     * @returns {boolean} true if element is filled in, false otherwise.
+     */
+    _isFilled: function($field) {
+
+      var type = $field.prop('type');
+      if (type === 'checkbox') {
+        return $field.prop('checked');
+      } else {
+        return !this._isEmpty($field.val());
+      }
+
+    },
+
+    /**
+     * Validate email.
+     *
+     * @param {string} str
+     * @returns {boolean} true if string is valid email address, false otherwise
+     */
     _isValidEmail: function(str) {
       return /^([äöüÜÖÄßA-Za-z0-9_\-\.\+])+\@([äöüÜÖÄßA-Za-z0-9_\-\.])+\.([äöüÜÖÄßA-Za-z]{2,4})$/i.test(str);
     },
 
+    /**
+     * Validate phone number.
+     *
+     * @param {string} str
+     * @returns {boolean} true if string is valid phone number, false otherwise
+     */
     _isValidPhone: function(str) {
       return /^(\+)?([\/\d-\s]+)$/.test(str);
     },
@@ -55,13 +107,11 @@
     /**
      * Validate postcode.
      *
-     * NB! Currently only validates against German postcode.
-     *
-     * @param {String} str
-     * @returns {Boolean} True if postcode is valid German postcode, false otherwise.
+     * @param {string} str
+     * @returns {boolean} true if postcode is valid postcode, false otherwise.
      */
     _isValidPostcode: function(str) {
-      return /^[\d]{5}$/.test(str);
+      return /^[A-Za-z0-9][A-Za-z0-9\-\s]{0,10}[A-Za-z0-9]$/i.test(str);
     },
 
     /**
@@ -69,8 +119,8 @@
      *
      * Numeric is a string representing a number with spaces allowed.
      *
-     * @param {String} str
-     * @returns {Boolean} True if string is numeric, false otherwise.
+     * @param {string} str
+     * @returns {boolean} true if string is numeric, false otherwise
      */
     _isValidNumeric: function(str) {
       return /^([\d\s]+)$/.test(str);
@@ -79,10 +129,10 @@
     /**
      * Validate name.
      *
-     * Name represents forename or surname of a person.
+     * Name represents first or last name of a person.
      *
-     * @param {String} str
-     * @returns {Boolean} True if string is correctly formatted name, false otherwise.
+     * @param {string} str
+     * @returns {boolean} true if string is correctly formatted name, false otherwise
      */
     _isValidName: function(str) {
       return /^([^<>|%$\;:,@\"§\{\[\]\}\?\*#]+)$/.test(str);
@@ -91,8 +141,8 @@
     /**
      * Validate street name.
      *
-     * @param {String} str
-     * @returns {Boolean} True if string is correctly formatted street name, false otherwise.
+     * @param {string} str
+     * @returns {boolean} true if string is correctly formatted street name, false otherwise
      */
     _isValidStreet: function(str) {
       return /^([\w\däöüÜÖÄß\s\/\&\",\.\'-]+)$/.test(str);
@@ -101,8 +151,8 @@
     /**
      * Validate house number.
      *
-     * @param {String} str
-     * @returns {Boolean} True if string is correctly formatted house number, false otherwise.
+     * @param {string} str
+     * @returns {boolean} true if string is correctly formatted house number, false otherwise
      */
     _isValidHouseNumber: function(str) {
       return /^([\w\d-\/\s]+)$/.test(str);
@@ -111,8 +161,8 @@
     /**
      * Determine if field value is unique.
      *
-     * @param {jQuery} $field jQuery element to be considered for validation.
-     * @returns {Boolean} true if element's value is unique, false otherwise.
+     * @param {jQuery} $field - jQuery element to be considered for validation
+     * @returns {boolean} true if element's value is unique, false otherwise
      */
     _isUnique: function($field) {
 
@@ -126,8 +176,7 @@
         memberFields.push(selector);
       }
       var set = $field.attr('data-validation-unique-set');
-      var $fields = this.$element.find('input[type=text][data-validation-unique-set=' + set + ']')
-        .not($field).not(memberFields.join(' '));
+      var $fields = this.$element.find('input[type=text][data-validation-unique-set=' + set + ']').not($field).not(memberFields.join(' '));
       $fields.each(function() {
         var subReferences = $(this).attr('data-validation-unique-with').split(',');
         var subValue = this._getElementValue($(this));
@@ -146,61 +195,117 @@
      * Retrieve field value.
      * Determine if value needs to be returned trimmed.
      *
-     * @param {jQuery} $field jQuery element.
-     * @returns {String} value of the jQuery element.
+     * @param {jQuery} $field - jQuery element
+     * @returns {string} value of the jQuery element
      */
     _getElementValue: function($field) {
       return $field.attr('data-validation-trim') === 'true' ? $.trim($field.val()) : $field.val();
     },
 
     /**
-     * Determine if field is filled in or considered empty.
-     * Input text fields have to contain a string value to be considered as filled in.
-     * Checkbox fields have to be checked to be considered as filled in.
+     * Get all child elements that have a data-validation attribute.
      *
-     * @param {jQuery} $field jQuery element to be considered for validation.
-     * @returns {Boolean} true if element is filled in, false otherwise.
+     * @returns {jQuery} jQuery object with elements that should be validated
      */
-    _isFilled: function($field) {
-
-      var type = $field.prop('type');
-      if (type === 'checkbox') {
-        return $field.prop('checked');
-      } else {
-        return !this._isEmpty($field.val());
-      }
-
+    _getValidationElements: function() {
+      return this.$element.find('*[data-validation]:visible');
     },
 
+    /**
+     * Publish errors.
+     *
+     * @param {Object} field - jQuery element
+     * @param {string} message - error message
+     * @returns {undefined}
+     */
     _publishError: function(field, message) {
 
       $(field).addClass(this.settings.errorClass).parent().addClass(this.settings.errorClass);
       var $span = $('<span></span>').addClass(this.settings.errorClass).text(message);
-      $(field).parent().append($span);
+
+      switch (this.settings.errorPublishingMode) {
+        case 'insertIntoTarget':
+          var $target = ('#' + this.settings.errorMsgContainerID);
+          if ($target) {
+            $target.append($span);
+          }
+          break;
+        case 'appendToParent':
+          $(field).parent().append($span);
+          break;
+        case 'prependToParent':
+          $(field).parent().prepend($span);
+          break;
+        case 'insertBeforeField':
+          $(field).before($span);
+          break;
+        case 'insertAfterField':
+          $(field).after($span);
+          break;
+      }
 
     },
 
-    _cleanErrors: function() {
+    /**
+     * Remove all errors messages and error classes set by this plugin instance.
+     *
+     * @returns {undefined}
+     */
+    _removeErrors: function() {
 
-      var validatedElements = this.$element.find('*[data-validation]');
-      validatedElements.removeClass(this.settings.errorClass).parent().removeClass(this.settings.errorClass);
-      validatedElements.siblings('span.' + this.settings.errorClass).remove();
+      var $fields = this._getValidationElements();
+      $fields.removeClass(this.settings.errorClass).parent().removeClass(this.settings.errorClass);
+      this.$element.find('span.' + this.settings.errorClass).remove();
 
     },
 
+    /**
+     * Return array with validation errors.
+     *
+     * @returns {Array} Array with current errors
+     */
+    getErrors: function() {
+      return this._errors;
+    },
+
+    /**
+     * Clear error array.
+     *
+     * @returns {undefined}
+     */
+    clearErrors: function() {
+      this._errors = [];
+    },
+
+    /**
+     * Determine if field should be validated.
+     *
+     * @param {Object} field - jQuery element
+     * @param {string} validationType - type that should be validated against
+     * @returns {boolean} true if field should be validated, false otherwise
+     */
     _shallValidate: function(field, validationType) {
 
-      if (this._isSkippable(validationType, field)) {
+      if (this._isSkippable(field, validationType)) {
         return false;
       }
-      var required = $(field).attr('data-validation').indexOf('required') !== -1;
-      return required || ($(field).val() && $(field).val().length > 0);
+      var $field = $(field);
+      var required = $field.attr('data-validation').indexOf('required') !== -1;
+      var value = $field.val();
+      return required || (value && value.length > 0);
 
     },
 
-    _isSkippable: function(validationType, field) {
+    /**
+     * Determine if field should be skipped.
+     *
+     * @param {Object} field - jQuery element
+     * @param {string} validationType - type that should be validated against
+     * @returns {boolean} true if field should be skipped, false otherwise
+     */
+    _isSkippable: function(field, validationType) {
 
-      if ($(field).attr('disabled')) {
+      if ($(field).prop('disabled')) {
         return true;
       }
       var skipperIdentAttribute = 'data-validation-skip';
@@ -225,111 +330,183 @@
 
     },
 
-    validate: function() {
+    /**
+     * Validate a single form field.
+     *
+     * @returns {boolean} true if validation passes, false if validation fails
+     */
+    validateField: function(field) {
 
       var self = this;
-      self._cleanErrors();
 
-      var validations;
-      var errors = [];
+      var $field = $(field);
+      var value = self._getElementValue($field);
+      var validations = $field.data('validation').split(',');
 
-      this.$element.find('*[data-validation]:visible').each(function() {
-        validations = $(this).attr('data-validation').split(',');
-        validationIteration:
-        for (var i = 0, l = validations.length, msg, validationType; i < l; i++) {
-          validationType = validations[i];
-          if (validationType.indexOf('password-match') !== -1) {
-            validationType = 'password-match';
-          }
-          if (!self._shallValidate(this, validationType)) {
-            continue;
-          }
-          switch (validationType) {
-            case 'required':
-              if (!self._isFilled($(this))) {
-                msg = $(this).attr('data-errormessage-required');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-                if (self.settings.stopOnRequired) {
-                  break validationIteration;
-                }
-              }
-              break;
-            case 'email':
-              if (!self._isValidEmail(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-email');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'phone':
-              if (!self._isValidPhone(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-phone');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'postcode':
-              if (!self._isValidPostcode(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-postcode');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'numeric':
-              if (!self._isValidNumeric(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-numeric');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'password-match':
-              var fieldName = validations[i].substring(validations[i].indexOf('[') + 1, validations[i].lastIndexOf(']'));
-              var $matchControl = self.$element.find('input[name="' + fieldName + '"]');
-              if ($matchControl.length === 0 || $(this).val() !== $matchControl.val()) {
-                msg = $(this).attr('data-errormessage-password-match');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'name':
-              if (!self._isValidName(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-name');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'street':
-              if (!self._isValidStreet(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-street');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'housenumber':
-              if (!self._isValidHouseNumber(self._getElementValue($(this)))) {
-                msg = $(this).attr('data-errormessage-housenumber');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-            case 'unique':
-              if (!self._isUnique($(this))) {
-                msg = $(this).attr('data-errormessage-unique');
-                self._publishError(this, msg);
-                errors.push({field: this, error: msg});
-              }
-              break;
-          }
+      validationIteration:
+      for (var i = 0, l = validations.length, validationType; i < l; i++) {
+
+        var ok = true;
+        validationType = validations[i];
+
+        if (validationType.indexOf('password-match') !== -1) {
+          validationType = 'password-match[pw2]';
         }
-      });
 
-      return errors;
+        if (!self._shallValidate(this, validationType)) {
+          continue;
+        }
+
+        switch (validationType) {
+
+          case 'required':
+            if (!self._isFilled($field)) {
+              ok = false;
+              if (self.settings.stopOnRequired) {
+                break validationIteration;
+              }
+            }
+            break;
+
+          case 'email':
+            if (!self._isValidEmail(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'phone':
+            if (!self._isValidPhone(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'postcode':
+            if (!self._isValidPostcode(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'numeric':
+            if (!self._isValidNumeric(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'name':
+            if (!self._isValidName(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'street':
+            if (!self._isValidStreet(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'housenumber':
+            if (!self._isValidHouseNumber(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'password-match':
+            var fieldName = validations[i].substring(validations[i].indexOf('[') + 1, validations[i].lastIndexOf(']'));
+            var $matchControl = self.$element.find('input[name="' + fieldName + '"]');
+            if ($matchControl.length === 0 || $field.val() !== $matchControl.val()) {
+              ok = false;
+            }
+            break;
+
+          case 'unique':
+            if (!self._isUnique($field)) {
+              ok = false;
+            }
+            break;
+        }
+
+        if (!ok) {
+          var msg = $field.data('errormsg-' + validationType);
+          self._publishError(field, msg);
+          self._errors.push({field: field, error: msg});
+        }
+
+      }
 
     },
 
+    /**
+     * Validate all connected form fields with data-validation attribute.
+     *
+     * @returns {boolean} true if validation passes, false if validation fails
+     */
+    validate: function() {
+
+      var self = this;
+      self._clearErrors();
+      self._removeErrors();
+
+      var $fields = self._getValidationElements();
+      $fields.each(function() {
+        self._validateField(this);
+      });
+
+      return (self._errors.length === 0);
+
+    },
+
+    /**
+     * Handle submit event.
+     *
+     * @param {event} event - jQuery event
+     * @returns {undefined}
+     */
+    _handleFormSubmit: function(event) {
+
+      var self = event.data;
+      if (!self.$element.validate()) {
+        event.preventDefault();
+      }
+
+    },
+
+    /**
+     * Add event listeners.
+     *
+     * @returns {undefined}
+     */
+    _addEventListeners: function() {
+
+      var self = this;
+
+      if (this.settings.triggerOnSubmit) {
+        this.$element.on('submit' + '.' + this._name, null, this, this._handleFormSubmit);
+      }
+
+      var $fields = this._getValidationElements();
+      $fields.each(function() {
+        var $this = $(this);
+        if ($this.data('validation-trigger') === 'change') {
+          $this.on('change' + '.' + self._name, function() {
+            self._validateField(this);
+          });
+        }
+      });
+
+    },
+
+    /**
+     * Destroy method.
+     *
+     * @returns {undefined}
+     */
     destroy: function() {
+
+      this.$element.off('submit' + '.' + this._name);
+      var $fields = this._getValidationElements();
+      $fields.off('change' + '.' + this._name);
       this.$element.removeData('plugin_' + pluginName);
+
     }
 
   };
@@ -341,4 +518,5 @@
       }
     });
   };
+
 })(jQuery, window, document);
