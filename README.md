@@ -10,7 +10,7 @@ jQuery form validation plugin
 
 ```html
 <form method="post" action="">
-  <input type="text" data-validate="required,email" data-validation-trigger="change" data-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
+  <input type="text" data-validation="required,email" data-validation-trigger="change" data-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
 </form>
 
 <script src="src/iptools-jquery-validator.js"></script>
@@ -19,7 +19,7 @@ jQuery form validation plugin
     $('form').iptValidator({
       triggerOnSubmit: true,
       stopOnRequired: false,
-      errorPublishingMode: 'insertAfterField',
+      errorPublishingMode: 'insertAfter',
       errorMsgContainerID: null,
       errorClass: 'error'
     });
