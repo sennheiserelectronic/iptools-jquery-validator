@@ -222,7 +222,7 @@
      * @returns {jQuery} jQuery object with elements that should be validated
      */
     _getValidationElements: function() {
-      return this.$element.find('*[data-validation]:visible');
+      return this.$element.find('*[data-validation]');
     },
 
     /**
