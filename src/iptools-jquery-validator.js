@@ -20,14 +20,14 @@
    *
    * @type Object.
    *
-   * {boolean} triggerOnSubmit - trigger validation on form submission.
+   * {boolean} validateOnSubmit - trigger validation on form submission.
    * {boolean} stopOnRequired - stop validation process on required error.
-   * {string} errorPublishingMode - appendToParent, prependToParent, insertAfterField, insertBeforeField, insertIntoTarget.
-   * {string} errorMsgContainerID - id of an element, that should contain all error messages (errorPublishingMode = insertIntoTarget).
+   * {string} errorPublishingMode - appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
+   * {string} errorMsgContainerID - ID of an element, that should contain all error messages (errorPublishingMode = insertInto).
    * {string} errorClass - class to be added to erroneous fields.
    */
   var defaults = {
-    triggerOnSubmit: true,
+    validateOnSubmit: true,
     stopOnRequired: false,
     errorPublishingMode: 'appendToParent',
     errorMsgContainerID: null,
@@ -166,6 +166,8 @@
      */
     _isUnique: function($field) {
 
+      var self = this;
+
       var unique = true;
       var references = $field.attr('data-validation-unique-with').split(',');
       var value = $field.val();
@@ -177,9 +179,9 @@
       }
       var set = $field.attr('data-validation-unique-set');
       var $fields = this.$element.find('input[type=text][data-validation-unique-set=' + set + ']').not($field).not(memberFields.join(' '));
-      $fields.each(function() {
+      $fields.each(function() {
         var subReferences = $(this).attr('data-validation-unique-with').split(',');
-        var subValue = this._getElementValue($(this));
+        var subValue = self._getElementValue($(this));
         for (var i = 0, l = subReferences.length; i < l; i++) {
           subValue += $('#' + subReferences[i]).val();
         }
@@ -220,42 +222,67 @@
      */
     _publishError: function(field, message) {
 
-      $(field).addClass(this.settings.errorClass).parent().addClass(this.settings.errorClass);
+      var $field = $(field);
+      $field.addClass(this.settings.errorClass);
       var $span = $('<span></span>').addClass(this.settings.errorClass).text(message);
 
       switch (this.settings.errorPublishingMode) {
-        case 'insertIntoTarget':
-          var $target = ('#' + this.settings.errorMsgContainerID);
-          if ($target) {
-            $target.append($span);
+        case 'insertInto':
+          if (this.settings.errorMsgContainerID !== null) {
+            var $target = $('#' + this.settings.errorMsgContainerID);
+            if ($target.length > 0) {
+              $target.append($span);
+            }
           }
           break;
         case 'appendToParent':
-          $(field).parent().append($span);
+          $field.parent().append($span);
           break;
         case 'prependToParent':
-          $(field).parent().prepend($span);
+          $field.parent().prepend($span);
           break;
-        case 'insertBeforeField':
-          $(field).before($span);
+        case 'insertBefore':
+          $field.before($span);
           break;
-        case 'insertAfterField':
-          $(field).after($span);
+        case 'insertAfter':
+          $field.after($span);
           break;
+      }
+
+      $span.attr('data-connected-field', $field.attr('name'));
+
+    },
+
+    /**
+     * Remove published error messages and error classes connected to a specified field.
+     *
+     * @param {Object} field - jQuery element
+     * @returns {undefined}
+     */
+    _removePublishedErrors: function(field) {
+
+      $(field).removeClass(this.settings.errorClass);
+      var fieldName = $(field).attr('name');
+      this.$element.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
+      if (this.settings.errorMsgContainerID !== null) {
+        $('#' + this.settings.errorMsgContainerID).find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
       }
 
     },
 
     /**
-     * Remove all errors messages and error classes set by this plugin instance.
+     * Remove all error messages and error classes from this form.
      *
      * @returns {undefined}
      */
-    _removeErrors: function() {
+    _removeAllPublishedErrors: function() {
 
       var $fields = this._getValidationElements();
-      $fields.removeClass(this.settings.errorClass).parent().removeClass(this.settings.errorClass);
+      $fields.removeClass(this.settings.errorClass);
       this.$element.find('span.' + this.settings.errorClass).remove();
+      if (this.settings.errorMsgContainerID !== null) {
+        $('#' + this.settings.errorMsgContainerID).empty();
+      }
 
     },
 
@@ -273,7 +300,7 @@
      *
      * @returns {undefined}
      */
-    clearErrors: function() {
+    _clearErrors: function() {
       this._errors = [];
     },
 
@@ -335,13 +362,15 @@
      *
      * @returns {boolean} true if validation passes, false if validation fails
      */
-    validateField: function(field) {
+    _validateField: function(field) {
 
       var self = this;
 
       var $field = $(field);
       var value = self._getElementValue($field);
       var validations = $field.data('validation').split(',');
+
+      self._removePublishedErrors(field);
 
       validationIteration:
       for (var i = 0, l = validations.length, validationType; i < l; i++) {
@@ -353,7 +382,7 @@
           validationType = 'password-match[pw2]';
         }
 
-        if (!self._shallValidate(this, validationType)) {
+        if (!self._shallValidate(field, validationType)) {
           continue;
         }
 
@@ -429,6 +458,7 @@
           var msg = $field.data('errormsg-' + validationType);
           self._publishError(field, msg);
           self._errors.push({field: field, error: msg});
+          break validationIteration;
         }
 
       }
@@ -444,7 +474,7 @@
 
       var self = this;
       self._clearErrors();
-      self._removeErrors();
+      self._removeAllPublishedErrors();
 
       var $fields = self._getValidationElements();
       $fields.each(function() {
@@ -464,7 +494,7 @@
     _handleFormSubmit: function(event) {
 
       var self = event.data;
-      if (!self.$element.validate()) {
+      if (!self.validate()) {
         event.preventDefault();
       }
 
@@ -479,7 +509,7 @@
 
       var self = this;
 
-      if (this.settings.triggerOnSubmit) {
+      if (this.settings.validateOnSubmit) {
         this.$element.on('submit' + '.' + this._name, null, this, this._handleFormSubmit);
       }
 
