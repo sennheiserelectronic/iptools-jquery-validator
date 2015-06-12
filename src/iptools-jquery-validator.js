@@ -391,7 +391,7 @@
         validationType = validations[i];
 
         if (validationType.indexOf('password-match') !== -1) {
-          validationType = 'password-match[pw2]';
+          validationType = 'password-match';
         }
 
         if (!self._shallValidate(field, validationType)) {
