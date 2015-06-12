@@ -105,16 +105,6 @@
     },
 
     /**
-     * Validate postcode.
-     *
-     * @param {string} str
-     * @returns {boolean} true if postcode is valid postcode, false otherwise.
-     */
-    _isValidPostcode: function(str) {
-      return /^[A-Za-z0-9][A-Za-z0-9\-\s]{0,10}[A-Za-z0-9]$/i.test(str);
-    },
-
-    /**
      * Validate numeric.
      *
      * Allows decimals, signs, and scientific notation.
@@ -168,6 +158,16 @@
      */
     _isValidHouseNumber: function(str) {
       return /^([\w\d-\/\s]+)$/.test(str);
+    },
+
+    /**
+     * Validate postcode.
+     *
+     * @param {string} str
+     * @returns {boolean} true if postcode is valid postcode, false otherwise.
+     */
+    _isValidPostcode: function(str) {
+      return /^[A-Za-z0-9][A-Za-z0-9\-\s]{0,10}[A-Za-z0-9]$/i.test(str);
     },
 
     /**
@@ -421,14 +421,14 @@
             }
             break;
 
-          case 'postcode':
-            if (!self._isValidPostcode(value)) {
+          case 'numeric':
+            if (!self._isValidNumeric(value)) {
               ok = false;
             }
             break;
 
-          case 'numeric':
-            if (!self._isValidNumeric(value)) {
+          case 'number':
+            if (!self._isValidNumber(value)) {
               ok = false;
             }
             break;
@@ -447,6 +447,12 @@
 
           case 'housenumber':
             if (!self._isValidHouseNumber(value)) {
+              ok = false;
+            }
+            break;
+
+          case 'postcode':
+            if (!self._isValidPostcode(value)) {
               ok = false;
             }
             break;
