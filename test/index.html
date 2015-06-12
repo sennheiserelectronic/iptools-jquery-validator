@@ -8,7 +8,9 @@
 <body>
   <div id="mocha"></div>
 
-  <input type="text"></input>
+  <form>
+    <input type="text" data-validation="required,email" data-validation-trigger="change" data-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
+  </form>
 
   <script src="lib/mocha/mocha.js"></script>
   <script>mocha.setup('bdd');</script>
