@@ -243,7 +243,7 @@
           if (this.settings.errorMsgContainerID !== null) {
             var $target = $('#' + this.settings.errorMsgContainerID);
             if ($target.length > 0) {
-              $target.append($span);
+              $target.append($span).show();
             }
           }
           break;
@@ -277,7 +277,11 @@
       var fieldName = $(field).attr('name');
       this.$element.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
       if (this.settings.errorMsgContainerID !== null) {
-        $('#' + this.settings.errorMsgContainerID).find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
+        var $container = $('#' + this.settings.errorMsgContainerID);
+        $container.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
+        if ($container.is(':empty')) {
+          $container.hide();
+        }
       }
 
     },
@@ -293,7 +297,7 @@
       $fields.removeClass(this.settings.errorClass);
       this.$element.find('span.' + this.settings.errorClass).remove();
       if (this.settings.errorMsgContainerID !== null) {
-        $('#' + this.settings.errorMsgContainerID).empty();
+        $('#' + this.settings.errorMsgContainerID).empty().hide();
       }
 
     },
