@@ -117,13 +117,25 @@
     /**
      * Validate numeric.
      *
-     * Numeric is a string representing a number with spaces allowed.
+     * Allows decimals, signs, and scientific notation.
      *
      * @param {string} str
      * @returns {boolean} true if string is numeric, false otherwise
      */
     _isValidNumeric: function(str) {
-      return /^([\d\s]+)$/.test(str);
+      return /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(str);
+    },
+
+    /**
+     * Validate number.
+     *
+     * Checks if a string consists of numbers only.
+     *
+     * @param {string} str
+     * @returns {boolean} true if string is numeric, false otherwise
+     */
+    _isValidNumber: function(str) {
+      return /^\d+$/.test(str);
     },
 
     /**
