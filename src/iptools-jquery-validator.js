@@ -31,7 +31,8 @@
     stopOnRequired: false,
     errorPublishingMode: 'appendToParent',
     errorMsgContainerID: null,
-    errorClass: 'error'
+    errorClass: 'error',
+    animationSpeed: 500
   };
 
   /**
@@ -237,30 +238,33 @@
       var $field = $(field);
       $field.addClass(this.settings.errorClass);
       var $span = $('<span></span>').addClass(this.settings.errorClass).text(message);
+      $span.hide();
 
       switch (this.settings.errorPublishingMode) {
         case 'insertInto':
           if (this.settings.errorMsgContainerID !== null) {
             var $target = $('#' + this.settings.errorMsgContainerID);
             if ($target.length > 0) {
-              $target.append($span).show();
+              $span.appendTo($target);
+              $target.delay(5).show(this.settings.animationSpeed);
             }
           }
           break;
         case 'appendToParent':
-          $field.parent().append($span);
+          $span.appendTo($field.parent());
           break;
         case 'prependToParent':
-          $field.parent().prepend($span);
+          $span.prependTo($field.parent());
           break;
         case 'insertBefore':
-          $field.before($span);
+          $span.insertBefore($field);
           break;
         case 'insertAfter':
-          $field.after($span);
+          $span.insertAfter($field);
           break;
       }
 
+      $span.fadeIn(this.settings.animationSpeed);
       $span.attr('data-connected-field', $field.attr('name'));
 
     },
@@ -279,9 +283,6 @@
       if (this.settings.errorMsgContainerID !== null) {
         var $container = $('#' + this.settings.errorMsgContainerID);
         $container.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
-        if ($container.is(':empty')) {
-          $container.hide();
-        }
       }
 
     },
@@ -297,7 +298,21 @@
       $fields.removeClass(this.settings.errorClass);
       this.$element.find('span.' + this.settings.errorClass).remove();
       if (this.settings.errorMsgContainerID !== null) {
-        $('#' + this.settings.errorMsgContainerID).empty().hide();
+        $('#' + this.settings.errorMsgContainerID).hide().empty();
+      }
+
+    },
+
+    /**
+     * Hides the message container if it is empty.
+     *
+     * @returns {undefined}
+     */
+    _hideMsgContainerIfEmpty: function() {
+
+      var $container = $('#' + this.settings.errorMsgContainerID);
+      if ($container.is(':empty')) {
+        $container.hide(this.settings.animationSpeed);
       }
 
     },
@@ -485,6 +500,8 @@
 
       }
 
+      self._hideMsgContainerIfEmpty();
+
     },
 
     /**
@@ -502,6 +519,8 @@
       $fields.each(function() {
         self._validateField(this);
       });
+
+      self._hideMsgContainerIfEmpty();
 
       return (self._errors.length === 0);
 
@@ -572,3 +591,4 @@
   };
 
 })(jQuery, window, document);
+
