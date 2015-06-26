@@ -22,17 +22,20 @@
    *
    * {boolean} validateOnSubmit - trigger validation on form submission.
    * {boolean} stopOnRequired - stop validation process on required error.
-   * {string} errorPublishingMode - appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
-   * {string} errorMsgContainerID - ID of an element, that should contain all error messages (errorPublishingMode = insertInto).
+   * {string} errorPublishingMode - none, appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
+   * {string} errorMsgBoxID - ID of an element, that should contain all error messages (errorPublishingMode = insertInto).
    * {string} errorClass - class to be added to erroneous fields.
+   * {string} boxboxAnimationMode - default (uses show/hide methods), fade, slide.
+   * {int} animationDuration - in ms.
    */
   var defaults = {
     validateOnSubmit: true,
     stopOnRequired: false,
     errorPublishingMode: 'appendToParent',
-    errorMsgContainerID: null,
+    errorMsgBoxID: null,
     errorClass: 'error',
-    animationSpeed: 500
+    boxboxAnimationMode: 'default',
+    animationDuration: 500
   };
 
   /**
@@ -191,7 +194,10 @@
         memberFields.push(selector);
       }
       var set = $field.attr('data-validation-unique-set');
-      var $fields = this.$element.find('input[type=text][data-validation-unique-set=' + set + ']').not($field).not(memberFields.join(' '));
+      var $fields = this.$element
+                      .find('input[type=text][data-validation-unique-set=' + set + ']')
+                      .not($field)
+                      .not(memberFields.join(' '));
       $fields.each(function() {
         var subReferences = $(this).attr('data-validation-unique-with').split(',');
         var subValue = self._getElementValue($(this));
@@ -242,11 +248,27 @@
 
       switch (this.settings.errorPublishingMode) {
         case 'insertInto':
-          if (this.settings.errorMsgContainerID !== null) {
-            var $target = $('#' + this.settings.errorMsgContainerID);
+          if (this.settings.errorMsgBoxID !== null) {
+            var $target = $('#' + this.settings.errorMsgBoxID);
             if ($target.length > 0) {
               $span.appendTo($target);
-              $target.delay(5).show(this.settings.animationSpeed);
+              if ($target.is(':hidden')) {
+                switch (this.settings.boxAnimationMode) {
+                  case 'fade':
+                    $target
+                      .delay(5)
+                      .css('opacity', 0)
+                      .slideDown(this.settings.animationDuration)
+                      .animate({ opacity: 1 }, this.settings.animationDuration);
+                    break;
+                  case 'slide':
+                    $target.delay(5).slideDown(this.settings.animationDuration);
+                    break;
+                  default:
+                    $target.delay(5).show(this.settings.animationDuration);
+                    break;
+                }
+              }
             }
           }
           break;
@@ -264,7 +286,7 @@
           break;
       }
 
-      $span.fadeIn(this.settings.animationSpeed);
+      $span.fadeIn(this.settings.animationDuration);
       $span.attr('data-connected-field', $field.attr('name'));
 
     },
@@ -280,8 +302,8 @@
       $(field).removeClass(this.settings.errorClass);
       var fieldName = $(field).attr('name');
       this.$element.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
-      if (this.settings.errorMsgContainerID !== null) {
-        var $container = $('#' + this.settings.errorMsgContainerID);
+      if (this.settings.errorMsgBoxID !== null) {
+        var $container = $('#' + this.settings.errorMsgBoxID);
         $container.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
       }
 
@@ -297,8 +319,8 @@
       var $fields = this._getValidationElements();
       $fields.removeClass(this.settings.errorClass);
       this.$element.find('span.' + this.settings.errorClass).remove();
-      if (this.settings.errorMsgContainerID !== null) {
-        $('#' + this.settings.errorMsgContainerID).hide().empty();
+      if (this.settings.errorMsgBoxID !== null) {
+        $('#' + this.settings.errorMsgBoxID).hide().empty();
       }
 
     },
@@ -308,11 +330,11 @@
      *
      * @returns {undefined}
      */
-    _hideMsgContainerIfEmpty: function() {
+    _hideMsgBoxIfEmpty: function() {
 
-      var $container = $('#' + this.settings.errorMsgContainerID);
-      if ($container.is(':empty')) {
-        $container.hide(this.settings.animationSpeed);
+      var $box = $('#' + this.settings.errorMsgBoxID);
+      if ($box.is(':empty')) {
+        $box.hide();
       }
 
     },
@@ -500,7 +522,7 @@
 
       }
 
-      self._hideMsgContainerIfEmpty();
+      self._hideMsgBoxIfEmpty();
 
     },
 
@@ -520,7 +542,7 @@
         self._validateField(this);
       });
 
-      self._hideMsgContainerIfEmpty();
+      self._hideMsgBoxIfEmpty();
 
       return (self._errors.length === 0);
 
@@ -591,4 +613,3 @@
   };
 
 })(jQuery, window, document);
-
