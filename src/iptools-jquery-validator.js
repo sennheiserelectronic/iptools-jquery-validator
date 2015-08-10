@@ -261,7 +261,7 @@
                       .delay(5)
                       .css('opacity', 0)
                       .slideDown(this.settings.animationDuration)
-                      .animate({ opacity: 1 }, this.settings.animationDuration);
+                      .animate({opacity: 1}, this.settings.animationDuration);
                     break;
                   case 'slide':
                     $target.delay(5).slideDown(this.settings.animationDuration);
