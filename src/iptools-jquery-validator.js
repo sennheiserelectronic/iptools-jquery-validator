@@ -21,6 +21,7 @@
    * @type Object.
    *
    * {boolean} validateOnSubmit - trigger validation on form submission.
+   * {string} validateOnCustomEvent - custom event that should trigger validation.
    * {boolean} stopOnRequired - stop validation process on required error.
    * {string} errorPublishingMode - none, appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
    * {string} errorMsgBoxID - ID of an element, that should contain all error messages (errorPublishingMode = insertInto).
