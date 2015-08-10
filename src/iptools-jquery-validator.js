@@ -30,7 +30,7 @@
    */
   var defaults = {
     validateOnSubmit: true,
-    validateOnCustomEvent: false,
+    validateOnCustomEvent: '',
     stopOnRequired: false,
     errorPublishingMode: 'appendToParent',
     errorMsgBoxID: null,
@@ -577,7 +577,7 @@
         this.$element.on('submit' + '.' + this._name, null, this, this._handleFormSubmit);
       }
 
-      if (this.settings.validateOnCustomEvent) {
+      if (this.settings.validateOnCustomEvent !== '') {
         this.$element.on(this.settings.validateOnCustomEvent, function() {
           return self.validate();
         });
