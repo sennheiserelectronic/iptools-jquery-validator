@@ -26,14 +26,16 @@ module.exports = function(grunt) {
       qa: {
         files: [
           '<%= yeoman.src %>/iptools-jquery-validator.js',
-          'test/spec/test.js'
+          '<%= yeoman.test %>/index.html',
+          '<%= yeoman.test %>/spec/test.js'
         ],
         tasks: ['concurrent:qa']
       },
       bdd: {
         files: [
           '<%= yeoman.src %>/iptools-jquery-validator.js',
-          'test/spec/test.js'
+          '<%= yeoman.test %>/index.html',
+          '<%= yeoman.test %>/spec/test.js'
         ],
         tasks: ['test']
       }
@@ -45,7 +47,7 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         '<%= yeoman.src %>/{,*/}*.js',
-        'test/spec/{,*/}*.js'
+        '<%= yeoman.test %>/spec/{,*/}*.js'
       ]
     },
     mocha: {
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
         options: {
           run: true
         },
-        src: ['test/index.html']
+        src: ['<%= yeoman.test %>/index.html']
       }
     },
     concurrent: {
