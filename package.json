@@ -11,8 +11,13 @@
     {
       "name": "David Lehnen",
       "email": "dl@interactive-pioneers.de"
+    },
+    {
+      "name": "Ain Tohvri",
+      "email": "at@interactive-pioneers.de"
     }
   ],
+  "license": "GPL-3.0",
   "bugs": "https://github.com/interactive-pioneers/iptools-jquery-validator/issues",
   "dependencies": {},
   "devDependencies": {
@@ -37,12 +42,6 @@
     "type": "git",
     "url": "https://github.com/interactive-pioneers/iptools-jquery-validator.git"
   },
-  "licenses": [
-    {
-      "type": "GPL",
-      "url": "https://github.com/ain/koodmeeter.js/blob/master/LICENSE"
-    }
-  ],
   "scripts": {
     "test": "grunt travis --verbose"
   },
