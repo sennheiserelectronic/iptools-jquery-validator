@@ -1,10 +1,4 @@
-/*
- * jQuery data input validator plugin.
- *
- * Copyright © 2013-2015 Ain Tohvri, David Lehnen, Interactive Pioneers GmbH
- */
-
-;(function($, window, document, undefined) {
+(function($, window, document, undefined) {
 
   'use strict';
 

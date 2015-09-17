@@ -107,18 +107,5 @@
 
     });
 
-    describe('destroy', function() {
-
-      beforeEach(function() {
-        object = $('form').iptValidator();
-      });
-
-      it('expected to remove data', function() {
-        object.data(pluginName).destroy();
-        return expect(object.data(pluginName)).to.not.be.ok;
-      });
-
-    });
-
   });
 })();
