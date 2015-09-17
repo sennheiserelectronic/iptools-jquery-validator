@@ -4,7 +4,7 @@ jQuery form validation plugin
 
 ## Requirements
 
-- jQuery (version TBD)
+- jQuery 1.11.3 (or greater)
 
 ## Example
 
