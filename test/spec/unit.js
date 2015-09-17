@@ -6,15 +6,17 @@
     var config = {
       errorClass: 'test'
     };
-
     var pluginName = 'plugin_iptValidator';
-
     var object = null;
 
     describe('init', function() {
 
       beforeEach(function() {
         object = $('form').iptValidator(config);
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
       });
 
       it('expected to construct object', function() {
@@ -33,6 +35,10 @@
         object = $('form').iptValidator();
       });
 
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
       it('expected to return false', function() {
         return expect(object.data(pluginName)._isEmpty('test')).to.not.be.ok;
       });
@@ -47,6 +53,10 @@
 
       beforeEach(function() {
         object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
       });
 
       it('expected to return false', function() {
@@ -65,6 +75,10 @@
         object = $('form').iptValidator();
       });
 
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
       it('expected to return false', function() {
         return expect(object.data(pluginName)._isValidPhone('Test')).to.not.be.ok;
       });
@@ -81,6 +95,10 @@
         object = $('form').iptValidator();
       });
 
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
       it('expected to return false', function() {
         return expect(object.data(pluginName)._isValidPostcode('-')).to.not.be.ok;
       });
@@ -95,6 +113,10 @@
 
       beforeEach(function() {
         object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
       });
 
       it('expected to return false', function() {

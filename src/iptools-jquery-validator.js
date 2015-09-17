@@ -22,6 +22,7 @@
    * {string} errorClass - class to be added to erroneous fields.
    * {string} boxboxAnimationMode - default (uses show/hide methods), fade, slide.
    * {int} animationDuration - in ms.
+   * {string} wipeTargets - 3rd party elements (e.g. errors) on page that need to be removed on validation.
    */
   var defaults = {
     validateOnSubmit: true,
@@ -31,7 +32,8 @@
     errorMsgBoxID: null,
     errorClass: 'error',
     boxboxAnimationMode: 'default',
-    animationDuration: 500
+    animationDuration: 500,
+    wipeTargets: null
   };
 
   /**
@@ -553,6 +555,9 @@
     _handleFormSubmit: function(event) {
 
       var self = event.data;
+
+      self.wipe();
+
       if (!self.validate()) {
         event.preventDefault();
       }
@@ -588,6 +593,15 @@
         }
       });
 
+    },
+
+    /**
+     * Remove any 3rd party errors if designated.
+     */
+    wipe: function() {
+      if (this.settings.wipeTargets) {
+        $(this.settings.wipeTargets).remove();
+      }
     },
 
     /**
