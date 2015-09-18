@@ -13,8 +13,6 @@
 
     describe('wipe', function() {
 
-      console.log('>');
-
       beforeEach(function() {
         $('<div>').addClass(wipeTargetClass).appendTo('form');
         object = $('form').iptValidator(config);
