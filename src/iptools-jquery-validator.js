@@ -417,6 +417,10 @@
 
       var self = this;
 
+      if (self.settings.wipeTargets) {
+        self.wipe();
+      }
+
       var $field = $(field);
       var value = self._getElementValue($field);
       var validations = $field.data('validation').split(',');
@@ -555,9 +559,6 @@
     _handleFormSubmit: function(event) {
 
       var self = event.data;
-
-      self.wipe();
-
       if (!self.validate()) {
         event.preventDefault();
       }
@@ -596,12 +597,10 @@
     },
 
     /**
-     * Remove any 3rd party errors if designated.
+     * Remove any 3rd party errors.
      */
     wipe: function() {
-      if (this.settings.wipeTargets) {
-        $(this.settings.wipeTargets).remove();
-      }
+      $(this.settings.wipeTargets).remove();
     },
 
     /**

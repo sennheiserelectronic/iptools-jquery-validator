@@ -36,6 +36,13 @@
         });
       });
 
+      context('when field is changed', function() {
+        it('expected to remove wipe targets on validation', function() {
+          object.find('input').trigger('change');
+          return expect($(config.wipeTargets)).to.have.length(0);
+        });
+      });
+
     });
 
     describe('destroy', function() {
