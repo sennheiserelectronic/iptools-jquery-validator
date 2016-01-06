@@ -8,8 +8,9 @@
 <body>
   <div id="mocha"></div>
 
-  <form>
-    <input type="text" data-validation="required,email" data-validation-trigger="change" data-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
+  <form action="#">
+    <input type="email" data-validation="required,email,match[email_confirmation]" data-validation-trigger="change" data-errormsg-required="Email is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email">
+    <input type="email" data-validation="required,email,match[email]" data-validation-trigger="change" data-errormsg-required="Email confirmation is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email_confirmation">
   </form>
 
   <script src="../bower_components/jquery/dist/jquery.min.js"></script>

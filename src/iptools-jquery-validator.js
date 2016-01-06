@@ -193,9 +193,9 @@
       }
       var set = $field.attr('data-validation-unique-set');
       var $fields = this.$element
-                      .find('input[type=text][data-validation-unique-set=' + set + ']')
-                      .not($field)
-                      .not(memberFields.join(' '));
+        .find('input[type=text][data-validation-unique-set=' + set + ']')
+        .not($field)
+        .not(memberFields.join(' '));
       $fields.each(function() {
         var subReferences = $(this).attr('data-validation-unique-with').split(',');
         var subValue = self._getElementValue($(this));
@@ -207,7 +207,19 @@
         }
       });
       return unique;
+    },
 
+    /**
+     * Determine if two inputs have equal values.
+     *
+     * @param {jQuery} $field - jQuery element to be considered for validation
+     * @param {string} reference - string reference to the name of the input to compare (name in brackets)
+     * @returns {boolean} true if input's value strict-equals to value of referenced input
+     */
+    _isMatching: function($field, reference) {
+      var fieldName = reference.substring(reference.indexOf('[') + 1, reference.lastIndexOf(']'));
+      var $matchControl = this.$element.find('*[name="' + fieldName + '"]');
+      return $field.val() === $matchControl.val();
     },
 
     /**
@@ -433,8 +445,8 @@
         var ok = true;
         validationType = validations[i];
 
-        if (validationType.indexOf('password-match') !== -1) {
-          validationType = 'password-match';
+        if (validationType.indexOf('match') !== -1) {
+          validationType = 'match';
         }
 
         if (!self._shallValidate(field, validationType)) {
@@ -500,10 +512,8 @@
             }
             break;
 
-          case 'password-match':
-            var fieldName = validations[i].substring(validations[i].indexOf('[') + 1, validations[i].lastIndexOf(']'));
-            var $matchControl = self.$element.find('input[name="' + fieldName + '"]');
-            if ($matchControl.length === 0 || $field.val() !== $matchControl.val()) {
+          case 'match':
+            if (!self._isMatching($field, validations[i])) {
               ok = false;
             }
             break;
