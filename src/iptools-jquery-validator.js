@@ -217,9 +217,18 @@
      * @returns {boolean} true if input's value strict-equals to value of referenced input
      */
     _isMatching: function($field, reference) {
+      return $field.val() === this._getElementFromValidationReference(reference).val();
+    },
+
+    /**
+     * Retrieve input element from validation reference.
+     *
+     * @param {string} reference - string reference to the name of the input from match validation schema
+     * @param {jQuery} jQuery element
+     */
+    _getElementFromValidationReference: function(reference) {
       var fieldName = reference.substring(reference.indexOf('[') + 1, reference.lastIndexOf(']'));
-      var $matchControl = this.$element.find('*[name="' + fieldName + '"]');
-      return $field.val() === $matchControl.val();
+      return this.$element.find('*[name="' + fieldName + '"]');
     },
 
     /**
@@ -515,6 +524,8 @@
           case 'match':
             if (!self._isMatching($field, validations[i])) {
               ok = false;
+            } else {
+              self._removePublishedErrors(self._getElementFromValidationReference(validations[i]));
             }
             break;
 

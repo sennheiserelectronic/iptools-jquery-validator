@@ -92,6 +92,18 @@
 
       });
 
+      context('when match error is fixed on related field', function() {
+
+        it('expected to remove rendered match errors', function() {
+          var email = 'no_reply@interactive-pioneers.de';
+          object.find('input[name=email_confirmation]').val(email).trigger('change');
+          object.find('input[name=email]').val(email).trigger('change');
+          var expectation = object.find('.' + config.errorClass).text();
+          return expect(expectation).to.not.include('Email addresses are not matching');
+        });
+
+      });
+
     });
 
   });
