@@ -1,0 +1,32 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>iptools-jquery-validator example</title>
+  <style>
+    .error {
+      display: block;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>iptools-jquery-validator example</h1>
+  <p>Use the fields below to trigger validation on change.</p>
+  <form action="#">
+    <div>
+      <input type="email" data-validation="required,email,match[email_confirmation]" data-validation-trigger="change" data-errormsg-required="Email is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email" placeholder="Email">
+    </div>
+    <div>
+      <input type="email" data-validation="required,email,match[email]" data-validation-trigger="change" data-errormsg-required="Email confirmation is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email_confirmation" placeholder="Email confirmation">
+    </div>
+  </form>
+  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="../src/iptools-jquery-validator.js"></script>
+  <script>
+    $('form').iptValidator({
+      errorClass: 'error',
+    });
+  </script>
+</body>
+</html>

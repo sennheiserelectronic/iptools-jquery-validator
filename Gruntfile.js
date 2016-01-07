@@ -69,8 +69,7 @@ module.exports = function(grunt) {
       },
       build: {
         tasks: [
-          'uglify',
-          'sass'
+          'uglify'
         ]
       }
     },
@@ -92,13 +91,6 @@ module.exports = function(grunt) {
             '<%= yeoman.dist %>/*'
           ]
         }]
-      }
-    },
-    sass: {
-      dist: {
-        files: {
-          'dist/iptools-jquery-validator.css' : 'src/iptools-jquery-validator.scss'
-        }
       }
     },
     jscs: {

@@ -5,7 +5,7 @@
 
     var wipeTargetClass = 'some-other-error-container';
     var config = {
-      errorClass: 'test',
+      errorClass: 'test-error',
       wipeTargets: '.' + wipeTargetClass
     };
     var pluginName = 'plugin_iptValidator';
@@ -54,6 +54,54 @@
       it('expected to remove data', function() {
         object.data(pluginName).destroy();
         return expect(object.data(pluginName)).to.not.be.ok;
+      });
+
+    });
+
+    describe('_isMatching', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator(config);
+      });
+
+      afterEach(function() {
+        object.find('input[type=email]').val('');
+        object.data(pluginName)._removeAllPublishedErrors();
+        object.data(pluginName).destroy();
+      });
+
+      context('when email field is different from confirmation email field', function() {
+
+        it('expected to render error', function() {
+          object.find('input[name=email]').val('no_reply@interactive-pioneers.de').trigger('change');
+          var expectation = object.find('.' + config.errorClass).text();
+          return expect(expectation).to.include('Email addresses are not matching');
+        });
+
+      });
+
+      context('when email field matches confirmation email field', function() {
+
+        it('expected to not render error', function() {
+          var email = 'no_reply@interactive-pioneers.de';
+          object.find('input[name=email]').val(email);
+          object.find('input[name=email_confirmation]').val(email).trigger('change');
+          var expectation = object.find('.' + config.errorClass).text();
+          return expect(expectation).to.not.include('Email addresses are not matching');
+        });
+
+      });
+
+      context('when match error is fixed on related field', function() {
+
+        it('expected to remove rendered match errors', function() {
+          var email = 'no_reply@interactive-pioneers.de';
+          object.find('input[name=email_confirmation]').val(email).trigger('change');
+          object.find('input[name=email]').val(email).trigger('change');
+          var expectation = object.find('.' + config.errorClass).text();
+          return expect(expectation).to.not.include('Email addresses are not matching');
+        });
+
       });
 
     });
