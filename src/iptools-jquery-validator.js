@@ -9,6 +9,11 @@
    */
   var pluginName = 'iptValidator';
 
+  var dataAttr = {
+    connectedField: 'connected-field',
+    errorClassSubscribers: 'validation-error-class-subscribers'
+  };
+
   /*
    * Default options.
    *
@@ -261,9 +266,12 @@
     _publishError: function(field, message) {
 
       var $field = $(field);
-      $field.addClass(this.settings.errorClass);
-      var $span = $('<span></span>').addClass(this.settings.errorClass).text(message);
-      $span.hide();
+      var $subscribers = $($(field).data(dataAttr.errorClassSubscribers));
+      $field.add($subscribers).addClass(this.settings.errorClass);
+      var $span = $('<span></span>').addClass(this.settings.errorClass)
+                                    .text(message)
+                                    .attr('data-' + dataAttr.connectedField, $field.attr('name'))
+                                    .hide();
 
       switch (this.settings.errorPublishingMode) {
         case 'insertInto':
@@ -306,7 +314,6 @@
       }
 
       $span.fadeIn(this.settings.animationDuration);
-      $span.attr('data-connected-field', $field.attr('name'));
 
     },
 
@@ -318,12 +325,18 @@
      */
     _removePublishedErrors: function(field) {
 
-      $(field).removeClass(this.settings.errorClass);
-      var fieldName = $(field).attr('name');
-      this.$element.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
+      var $field = $(field);
+      var $subscribers = $($(field).data(dataAttr.errorClassSubscribers));
+      $field.add($subscribers).removeClass(this.settings.errorClass);
+
+      var fieldName = $field.attr('name');
+      var errorMessageSelector = 'span.' + this.settings.errorClass +
+        '[' + dataAttr.connectedField + '="' + fieldName + '"]';
+      this.$element.find(errorMessageSelector).remove();
       if (this.settings.errorMsgBoxID !== null) {
-        var $container = $('#' + this.settings.errorMsgBoxID);
-        $container.find('span.' + this.settings.errorClass + '[data-connected-field="' + fieldName + '"]').remove();
+        $('#' + this.settings.errorMsgBoxID)
+          .find(errorMessageSelector)
+          .remove();
       }
 
     },
@@ -336,8 +349,14 @@
     _removeAllPublishedErrors: function() {
 
       var $fields = this._getValidationElements();
-      $fields.removeClass(this.settings.errorClass);
-      this.$element.find('span.' + this.settings.errorClass).remove();
+      $fields
+        .removeClass(this.settings.errorClass)
+        .each(function() {
+          $($(this).data(dataAttr.errorClassSubscribers)).removeClass(this.settings.errorClass);
+        });
+      this.$element
+        .find('span.' + this.settings.errorClass)
+        .remove();
       if (this.settings.errorMsgBoxID !== null) {
         $('#' + this.settings.errorMsgBoxID).hide().empty();
       }
