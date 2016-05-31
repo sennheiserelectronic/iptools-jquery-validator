@@ -348,11 +348,12 @@
      */
     _removeAllPublishedErrors: function() {
 
+      var self = this;
       var $fields = this._getValidationElements();
       $fields
         .removeClass(this.settings.errorClass)
         .each(function() {
-          $($(this).data(dataAttr.errorClassSubscribers)).removeClass(this.settings.errorClass);
+          $($(this).data(dataAttr.errorClassSubscribers)).removeClass(self.settings.errorClass);
         });
       this.$element
         .find('span.' + this.settings.errorClass)
