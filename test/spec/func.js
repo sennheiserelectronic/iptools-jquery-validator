@@ -3,10 +3,15 @@
 (function() {
   describe('iptValidator', function() {
 
-    var wipeTargetClass = 'some-other-error-container';
+    var classes = {
+      wipeTarget: 'some-other-error-container'
+    };
+    var selectors = {
+      emailErrorClassSubscriber: '.email-label'
+    };
     var config = {
       errorClass: 'test-error',
-      wipeTargets: '.' + wipeTargetClass
+      wipeTargets: '.' + classes.wipeTarget
     };
     var pluginName = 'plugin_iptValidator';
     var object = null;
@@ -14,7 +19,7 @@
     describe('wipe', function() {
 
       beforeEach(function() {
-        $('<div>').addClass(wipeTargetClass).appendTo('form');
+        $('<div>').addClass(classes.wipeTarget).appendTo('form');
         object = $('form').iptValidator(config);
       });
 
@@ -78,6 +83,19 @@
           return expect(expectation).to.include('Email addresses are not matching');
         });
 
+        it('expected to set error class on email field', function() {
+          var $field = object.find('input[name=email]');
+          $field.val('no_reply@interactive-pioneers.de').trigger('change');
+          return expect($field.hasClass(config.errorClass)).to.be.ok;
+        });
+
+        it('expected to set error class on subscriber (email label)', function() {
+          var $form = object;
+          $form.find('input[name=email]').val('no_reply@interactive-pioneers.de').trigger('change');
+          var expectation = $form.find(selectors.emailErrorClassSubscriber).hasClass(config.errorClass);
+          return expect(expectation).to.be.ok;
+        });
+
       });
 
       context('when email field matches confirmation email field', function() {
@@ -85,7 +103,8 @@
         it('expected to not render error', function() {
           var email = 'no_reply@interactive-pioneers.de';
           object.find('input[name=email]').val(email);
-          object.find('input[name=email_confirmation]').val(email).trigger('change');
+          object.find('input[name=email_confirmation]').val(email);
+          object.trigger('submit');
           var expectation = object.find('.' + config.errorClass).text();
           return expect(expectation).to.not.include('Email addresses are not matching');
         });
@@ -100,6 +119,14 @@
           object.find('input[name=email]').val(email).trigger('change');
           var expectation = object.find('.' + config.errorClass).text();
           return expect(expectation).to.not.include('Email addresses are not matching');
+        });
+
+        it('expected to remove error class from subscribers (email label)', function() {
+          var email = 'no_reply@interactive-pioneers.de';
+          object.find('input[name=email_confirmation]').val(email).trigger('change');
+          object.find('input[name=email]').val(email).trigger('change');
+          var expectation = object.find(selectors.emailErrorClassSubscriber).hasClass();
+          return expect(expectation).to.not.be.ok;
         });
 
       });
