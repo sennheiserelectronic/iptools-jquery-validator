@@ -20,7 +20,7 @@
    * {string} errorPublishingMode - none, appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
    * {string} errorMsgBoxID - ID of an element, that should contain all error messages (errorPublishingMode = insertInto).
    * {string} errorClass - class to be added to erroneous fields.
-   * {string} boxboxAnimationMode - default (uses show/hide methods), fade, slide.
+   * {string} boxAnimationMode - default (uses show/hide methods), fade, slide.
    * {int} animationDuration - in ms.
    * {string} wipeTargets - 3rd party elements (e.g. errors) on page that need to be removed on validation.
    */
@@ -31,7 +31,7 @@
     errorPublishingMode: 'appendToParent',
     errorMsgBoxID: null,
     errorClass: 'error',
-    boxboxAnimationMode: 'default',
+    boxAnimationMode: 'default',
     animationDuration: 500,
     wipeTargets: null
   };
