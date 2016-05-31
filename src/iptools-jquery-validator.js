@@ -331,7 +331,7 @@
 
       var fieldName = $field.attr('name');
       var errorMessageSelector = 'span.' + this.settings.errorClass +
-        '[' + dataAttr.connectedField + '="' + fieldName + '"]';
+        '[data-' + dataAttr.connectedField + '="' + fieldName + '"]';
       this.$element.find(errorMessageSelector).remove();
       if (this.settings.errorMsgBoxID !== null) {
         $('#' + this.settings.errorMsgBoxID)
