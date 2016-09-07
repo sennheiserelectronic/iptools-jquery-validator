@@ -2,7 +2,7 @@
   "name": "iptools-jquery-validator",
   "description": "jQuery form validation plugin",
   "main": "dist/iptools-jquery-validator.min.js",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "GPL-3.0",
   "ignore": [
     ".git*",
