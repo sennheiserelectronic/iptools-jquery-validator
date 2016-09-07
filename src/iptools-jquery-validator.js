@@ -11,7 +11,8 @@
 
   var dataAttr = {
     connectedField: 'connected-field',
-    errorClassSubscribers: 'validation-error-class-subscribers'
+    errorClassSubscribers: 'validation-error-class-subscribers',
+    regExp: 'validation-regexp'
   };
 
   /*
@@ -89,6 +90,18 @@
         return !this._isEmpty($field.val());
       }
 
+    },
+
+    /**
+     * Validate against regular expression.
+     *
+     * @param {jQuery} $field - field to be validated
+     * @param {string} value - value to be tested
+     * @returns {boolean} true if regexp matches, false otherwise
+     */
+    _matchesRexExp: function($field, value) {
+      var regExp = new RegExp($field.data(dataAttr.regExp));
+      return regExp.test(value);
     },
 
     /**
@@ -489,6 +502,12 @@
               if (self.settings.stopOnRequired) {
                 break validationIteration;
               }
+            }
+            break;
+
+          case 'regexp':
+            if (!self._matchesRexExp($field, value)) {
+              ok = false;
             }
             break;
 
