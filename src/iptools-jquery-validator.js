@@ -268,17 +268,17 @@
       var $field = $(field);
       var $subscribers = $($(field).data(dataAttr.errorClassSubscribers));
       $field.add($subscribers).addClass(this.settings.errorClass);
-      var $span = $('<span></span>').addClass(this.settings.errorClass)
-                                    .text(message)
-                                    .attr('data-' + dataAttr.connectedField, $field.attr('name'))
-                                    .hide();
+      var $div = $('<div/>').addClass(this.settings.errorClass)
+                            .text(message)
+                            .attr('data-' + dataAttr.connectedField, $field.attr('name'))
+                            .hide();
 
       switch (this.settings.errorPublishingMode) {
         case 'insertInto':
           if (this.settings.errorMsgBoxID !== null) {
             var $target = $('#' + this.settings.errorMsgBoxID);
             if ($target.length > 0) {
-              $span.appendTo($target);
+              $div.appendTo($target);
               if ($target.is(':hidden')) {
                 switch (this.settings.boxAnimationMode) {
                   case 'fade':
@@ -300,20 +300,20 @@
           }
           break;
         case 'appendToParent':
-          $span.appendTo($field.parent());
+          $div.appendTo($field.parent());
           break;
         case 'prependToParent':
-          $span.prependTo($field.parent());
+          $div.prependTo($field.parent());
           break;
         case 'insertBefore':
-          $span.insertBefore($field);
+          $div.insertBefore($field);
           break;
         case 'insertAfter':
-          $span.insertAfter($field);
+          $div.insertAfter($field);
           break;
       }
 
-      $span.fadeIn(this.settings.animationDuration);
+      $div.fadeIn(this.settings.animationDuration);
 
     },
 
@@ -330,12 +330,11 @@
       $field.add($subscribers).removeClass(this.settings.errorClass);
 
       var fieldName = $field.attr('name');
-      var errorMessageSelector = 'span.' + this.settings.errorClass +
-        '[data-' + dataAttr.connectedField + '="' + fieldName + '"]';
-      this.$element.find(errorMessageSelector).remove();
+      var selector = '*[data-' + dataAttr.connectedField + '="' + fieldName + '"]';
+      this.$element.find(selector).remove();
       if (this.settings.errorMsgBoxID !== null) {
         $('#' + this.settings.errorMsgBoxID)
-          .find(errorMessageSelector)
+          .find(selector)
           .remove();
       }
 
@@ -356,7 +355,7 @@
           $($(this).data(dataAttr.errorClassSubscribers)).removeClass(self.settings.errorClass);
         });
       this.$element
-        .find('span.' + this.settings.errorClass)
+        .find('*[data-' + dataAttr.connectedField + ']')
         .remove();
       if (this.settings.errorMsgBoxID !== null) {
         $('#' + this.settings.errorMsgBoxID).hide().empty();
