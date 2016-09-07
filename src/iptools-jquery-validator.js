@@ -20,25 +20,25 @@
    *
    * @type Object.
    *
+   * {int} animationDuration - in ms.
+   * {string} boxAnimationMode - default (uses show/hide methods), fade, slide.
+   * {string} errorClass - class to be added to erroneous fields, error message and and error class subscribers.
+   * {string} errorMsgBoxID - ID of element, that should hold the error messages (errorPublishingMode = insertInto).
+   * {string} errorPublishingMode - none, appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
+   * {boolean} stopOnRequired - stop validation process on required error.
    * {boolean} validateOnSubmit - trigger validation on form submission.
    * {string} validateOnCustomEvent - custom event that should trigger validation.
-   * {boolean} stopOnRequired - stop validation process on required error.
-   * {string} errorPublishingMode - none, appendToParent, prependToParent, insertAfter, insertBefore, insertInto.
-   * {string} errorMsgBoxID - ID of an element, that should contain all error messages (errorPublishingMode = insertInto).
-   * {string} errorClass - class to be added to erroneous fields.
-   * {string} boxAnimationMode - default (uses show/hide methods), fade, slide.
-   * {int} animationDuration - in ms.
    * {string} wipeTargets - 3rd party elements (e.g. errors) on page that need to be removed on validation.
    */
   var defaults = {
+    animationDuration: 500,
+    boxAnimationMode: 'default',
+    errorClass: 'error',
+    errorMsgBoxID: null,
+    errorPublishingMode: 'appendToParent',
+    stopOnRequired: false,
     validateOnSubmit: true,
     validateOnCustomEvent: '',
-    stopOnRequired: false,
-    errorPublishingMode: 'appendToParent',
-    errorMsgBoxID: null,
-    errorClass: 'error',
-    boxAnimationMode: 'default',
-    animationDuration: 500,
     wipeTargets: null
   };
 
