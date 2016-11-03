@@ -619,7 +619,7 @@
 
       var self = event.data;
       if (!self.validate()) {
-        event.preventDefault();
+        return false;
       }
 
     },
