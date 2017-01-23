@@ -37,6 +37,22 @@ jQuery form validation plugin.
 | `data-validation-unique-with` | IDs of controls amongst of which field should have unique value. |
 | `data-errormsg-<schema>` | Error message to be displayed in case validation fails, e.g. `data-errormsg-required="Name is required."`. |
 
+### Options
+
+Following options (optional) can be used to initialise component:
+
+| Option | Description |
+| --------- | ----------- |
+| `stopOnRequired` | Stop further validation if `required` validation schema fails. Defaults to `false`. |
+| `triggerOnSubmit` | Trigger validation event on submit. Defaults to `true`. |
+| `validateOnCustomEvent` | Trigger validation on custom event. Defaults to `''`. |
+| `errorPublishingMode` | Position of error message relative to erroneous field. Possible values: `insertInto`, `insertAfter`, `insertBefore`, `appendToParent`, `prependToParent`. Deafaults to `appendToParent`. |
+| `errorMsgBoxID` | HTML Element ID holding error messages. Corresponds to `errorPublishingMode: 'insertInto'`. Defaults to `null`. |
+| `errorClass` | CSS class added to erroneous fields, error message and error class subscribers. Defaults to `error`. |
+| `boxAnimationMode` | Animation strategy applied to errors. Possible values: `default`, `fade`, `slide`. Defaults to `default` (show/hide). |
+| `animationDuration` | Duration of boc animation in ms. Defaults to `500`. |
+| `wipeTargets` | Third party elements (e.g. errors) to be removed from DOM on validation. Defaults to `null`. |
+
 ## Example
 
 ```html
@@ -51,7 +67,7 @@ jQuery form validation plugin.
       triggerOnSubmit: true,
       stopOnRequired: false,
       errorPublishingMode: 'insertAfter',
-      errorMsgContainerID: null,
+      errorMsgBoxID: null,
       errorClass: 'error'
     });
   });
