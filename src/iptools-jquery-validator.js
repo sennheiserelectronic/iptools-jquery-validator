@@ -10,7 +10,7 @@
   var pluginName = 'iptValidator';
 
   var dataAttr = {
-    connectedField: 'connected-field',
+    connectedField: 'validation-connected-field',
     errorClassSubscribers: 'validation-error-class-subscribers',
     regExp: 'validation-regexp'
   };
