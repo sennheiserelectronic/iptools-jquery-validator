@@ -154,5 +154,37 @@
 
     });
 
+
+    describe('_isFilled', function() {
+
+      var $input = $('<input id="phone" type="tel">');
+      var $checkbox = $('<input id="terms" type="checkbox">');
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to return true if field is filled in', function() {
+        return expect(object.data(pluginName)._isFilled($('<input type="text" value="iptools validator">'))).to.be.ok;
+      });
+
+      it('expected to return true if checkbox is checked', function() {
+        return expect(object.data(pluginName)._isFilled($('<input type="checkbox" checked="checked">'))).to.be.ok;
+      });
+
+      it('expected to return false if field is empty', function() {
+        return expect(object.data(pluginName)._isFilled($('<input type="text" value="">'))).to.not.be.ok;
+      });
+
+      it('expected to return false if checkbox is unchecked', function() {
+        return expect(object.data(pluginName)._isFilled($('<input type="checkbox">'))).to.not.be.ok;
+      });
+
+    });
+
   });
 })();
