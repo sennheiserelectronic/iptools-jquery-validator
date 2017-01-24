@@ -1,4 +1,4 @@
-# iptools-jquery-validator [![Build Status](http://img.shields.io/travis/interactive-pioneers/iptools-jquery-validator.svg)](https://travis-ci.org/interactive-pioneers/iptools-jquery-validator)
+# iptools-jquery-validator [![Build Status](http://img.shields.io/travis/interactive-pioneers/iptools-jquery-validator.svg)](https://travis-ci.org/interactive-pioneers/iptools-jquery-validator) [![Bower version](https://badge.fury.io/bo/iptools-jquery-validator.svg)](http://badge.fury.io/bo/iptools-jquery-validator)
 
 jQuery form validation plugin.
 
