@@ -457,6 +457,49 @@
 
     });
 
+    describe('_isValidHouseNumber', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to be true on number as string', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('524')).to.be.ok;
+      });
+
+      it('expected to be true on number', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber(43)).to.be.ok;
+      });
+
+      it('expected to be true on dashed numbers', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('3-4')).to.be.ok;
+      });
+
+      it('expected to be true on spaced numbers', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('12 43')).to.be.ok;
+      });
+
+      it('expected to be true on number and letter', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('12A')).to.be.ok;
+      });
+
+      it('expected to be true on number and dashed letter', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('12-A')).to.be.ok;
+      });
+
+      it('expected to be true on number and spaced letter', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('12 A')).to.be.ok;
+      });
+
+      it('expected to be true on number and slashed letter', function() {
+        return expect(object.data(pluginName)._isValidHouseNumber('12/A')).to.be.ok;
+      });
+
+    });
 
   });
 })();
