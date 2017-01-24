@@ -224,5 +224,66 @@
 
     });
 
+    describe('_isValidNumeric', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to return true on numeric string', function() {
+        return expect(object.data(pluginName)._isValidNumeric('343434')).to.be.ok;
+      });
+
+      it('expected to return true on number', function() {
+        return expect(object.data(pluginName)._isValidNumeric(122332)).to.be.ok;
+      });
+
+      it('expected to return true on float', function() {
+        return expect(object.data(pluginName)._isValidNumeric(122332.232354)).to.be.ok;
+      });
+
+      it('expected to return true on float as string', function() {
+        return expect(object.data(pluginName)._isValidNumeric('1.2123434')).to.be.ok;
+      });
+
+      it('expected to return true on postive number as string', function() {
+        return expect(object.data(pluginName)._isValidNumeric('+1.2123434')).to.be.ok;
+      });
+
+      it('expected to return true on negative number as string', function() {
+        return expect(object.data(pluginName)._isValidNumeric('-1.2123434')).to.be.ok;
+      });
+
+      it('expected to return true on E notation as string', function() {
+        return expect(object.data(pluginName)._isValidNumeric('1.212e+42')).to.be.ok;
+      });
+
+      it('expected to return false on non-numeric string', function() {
+        return expect(object.data(pluginName)._isValidNumeric('a493404')).to.not.be.ok;
+      });
+
+      it('expected to return false on boolean', function() {
+        return expect(object.data(pluginName)._isValidNumeric(true)).to.not.be.ok;
+      });
+
+      it('expected to return false on function', function() {
+        var f = function() { return true; };
+        return expect(object.data(pluginName)._isValidNumeric(f)).to.not.be.ok;
+      });
+
+      it('expected to return false on array', function() {
+        return expect(object.data(pluginName)._isValidNumeric([1212, 2332, 54])).to.not.be.ok;
+      });
+
+      it('expected to return false on object', function() {
+        return expect(object.data(pluginName)._isValidNumeric({number: 3232})).to.not.be.ok;
+      });
+
+    });
+
   });
 })();
