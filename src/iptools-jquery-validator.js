@@ -111,7 +111,7 @@
      * @returns {boolean} true if string is valid email address, false otherwise
      */
     _isValidEmail: function(str) {
-      return /^([äöüÜÖÄßA-Za-z0-9_\-\.\+])+\@([äöüÜÖÄßA-Za-z0-9_\-\.])+\.([äöüÜÖÄßA-Za-z]{2,4})$/i.test(str);
+      return /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i.test(str);
     },
 
     /**

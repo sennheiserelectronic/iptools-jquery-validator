@@ -60,12 +60,36 @@
         object.data(pluginName).destroy();
       });
 
-      it('expected to return false', function() {
+      it('expected to return false on single string', function() {
         return expect(object.data(pluginName)._isValidEmail('test')).to.not.be.ok;
       });
 
-      it('expected to return true', function() {
+      it('expected to return false on joint string with @ sign', function() {
+        return expect(object.data(pluginName)._isValidEmail('test@something')).to.not.be.ok;
+      });
+
+      it('expected to return true on regular email', function() {
         return expect(object.data(pluginName)._isValidEmail('test@test.de')).to.be.ok;
+      });
+
+      it('expected to return true on Gmail-style +-formatted email', function() {
+        return expect(object.data(pluginName)._isValidEmail('test+filter@test.com')).to.be.ok;
+      });
+
+      it('expected to return true on 4-char TLD', function() {
+        return expect(object.data(pluginName)._isValidEmail('test@test.info')).to.be.ok;
+      });
+
+      it('expected to return true on .international TLD', function() {
+        return expect(object.data(pluginName)._isValidEmail('test@test.international')).to.be.ok;
+      });
+
+      it('expected to return true on dotted username', function() {
+        return expect(object.data(pluginName)._isValidEmail('test.of.dotted.notation@test.international')).to.be.ok;
+      });
+
+      it('expected to return true on subdomain', function() {
+        return expect(object.data(pluginName)._isValidEmail('test.of.dotted.notation@subsubdomain.subdomain.test.international')).to.be.ok;
       });
 
     });
