@@ -183,5 +183,46 @@
 
     });
 
+    describe('_isValidNumber', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to return true on numeric string', function() {
+        return expect(object.data(pluginName)._isValidNumber('343434')).to.be.ok;
+      });
+
+      it('expected to return true on number', function() {
+        return expect(object.data(pluginName)._isValidNumber(122332)).to.be.ok;
+      });
+
+      it('expected to return false on non-numeric string', function() {
+        return expect(object.data(pluginName)._isValidNumber('a493404')).to.not.be.ok;
+      });
+
+      it('expected to return false on boolean', function() {
+        return expect(object.data(pluginName)._isValidNumber(true)).to.not.be.ok;
+      });
+
+      it('expected to return false on function', function() {
+        var f = function() { return true; };
+        return expect(object.data(pluginName)._isValidNumber(f)).to.not.be.ok;
+      });
+
+      it('expected to return false on array', function() {
+        return expect(object.data(pluginName)._isValidNumber([1212, 2332, 54])).to.not.be.ok;
+      });
+
+      it('expected to return false on object', function() {
+        return expect(object.data(pluginName)._isValidNumber({number: 3232})).to.not.be.ok;
+      });
+
+    });
+
   });
 })();
