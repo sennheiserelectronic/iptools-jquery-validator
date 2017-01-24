@@ -222,6 +222,18 @@
         return expect(object.data(pluginName)._isValidNumber({number: 3232})).to.not.be.ok;
       });
 
+      it('expected to return false on float', function() {
+        return expect(object.data(pluginName)._isValidNumber(2.343594)).to.not.be.ok;
+      });
+
+      it('expected to return false on float as string', function() {
+        return expect(object.data(pluginName)._isValidNumber('2.343594')).to.not.be.ok;
+      });
+
+      it('expected to return false on E notation', function() {
+        return expect(object.data(pluginName)._isValidNumber('2.343594e+44')).to.not.be.ok;
+      });
+
     });
 
     describe('_isValidNumeric', function() {
