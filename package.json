@@ -50,6 +50,7 @@
   "scripts": {
     "test": "npm run grunt travis --verbose",
     "install": "npm run bower install",
+    "start": "npm run grunt watch:bdd",
     "bower": "bower",
     "grunt": "grunt"
   },
