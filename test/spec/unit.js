@@ -157,9 +157,6 @@
 
     describe('_isFilled', function() {
 
-      var $input = $('<input id="phone" type="tel">');
-      var $checkbox = $('<input id="terms" type="checkbox">');
-
       beforeEach(function() {
         object = $('form').iptValidator();
       });
