@@ -296,5 +296,94 @@
 
     });
 
+    describe('_isValidName', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to return true on two space-separated words', function() {
+        return expect(object.data(pluginName)._isValidName('Iptools Validator')).to.be.ok;
+      });
+
+      it('expected to return true on single string', function() {
+        return expect(object.data(pluginName)._isValidName('Validator')).to.be.ok;
+      });
+
+      // FIXME: should return false if only number given.
+      xit('expected to return false on number as string', function() {
+        return expect(object.data(pluginName)._isValidName('4835894954')).to.not.be.ok;
+      });
+
+      context('expected to return false on string with special character', function() {
+
+        it('@', function() {
+          return expect(object.data(pluginName)._isValidName('pioneers@work')).to.not.be.ok;
+        });
+
+        it('<', function() {
+          return expect(object.data(pluginName)._isValidName('pioneers<work')).to.not.be.ok;
+        });
+
+        it('>', function() {
+          return expect(object.data(pluginName)._isValidName('pioneer>work')).to.not.be.ok;
+        });
+
+        it('%', function() {
+          return expect(object.data(pluginName)._isValidName('pioneers%work')).to.not.be.ok;
+        });
+
+        it('*', function() {
+          return expect(object.data(pluginName)._isValidName('pioneer*')).to.not.be.ok;
+        });
+
+        it('#', function() {
+          return expect(object.data(pluginName)._isValidName('#pioneer')).to.not.be.ok;
+        });
+
+        it('[', function() {
+          return expect(object.data(pluginName)._isValidName('pioneer[')).to.not.be.ok;
+        });
+
+        it(']', function() {
+          return expect(object.data(pluginName)._isValidName('pioneer]')).to.not.be.ok;
+        });
+
+        it('{', function() {
+          return expect(object.data(pluginName)._isValidName('pioneer{')).to.not.be.ok;
+        });
+
+        it('}', function() {
+          return expect(object.data(pluginName)._isValidName('pioneer}')).to.not.be.ok;
+        });
+
+        it('§', function() {
+          return expect(object.data(pluginName)._isValidName('§ pioneer')).to.not.be.ok;
+        });
+
+        it(',', function() {
+          return expect(object.data(pluginName)._isValidName('Pioneers,Interactive')).to.not.be.ok;
+        });
+
+        it('$', function() {
+          return expect(object.data(pluginName)._isValidName('$Pioneer')).to.not.be.ok;
+        });
+
+        it('"', function() {
+          return expect(object.data(pluginName)._isValidName('"Pioneer"')).to.not.be.ok;
+        });
+
+        it('|', function() {
+          return expect(object.data(pluginName)._isValidName('PioneerToo|s')).to.not.be.ok;
+        });
+
+      });
+
+    });
+
   });
 })();
