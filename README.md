@@ -8,50 +8,50 @@ jQuery form validation plugin.
 
 ## Supported validation schemas
 
-| Schema | Description |
-| --------- | ----------- |
-| `required` | Checks if field has value. |
-| `email` | Checks if field value is email. |
-| `regexp` | Checks field value against regular expression defined in `data-validation-regexp`. |
-| `phone` | Checks if field value is phone number. Allows `+`, space and numbers. |
-| `numeric` | Checks if field value is numeric. Allows decimals, signs, and scientific notation. |
-| `number` | Checks if field value is number. |
-| `name` | Checks if field value is name, i.e. first or last name of person. |
-| `street` | Checks if field value is street name. |
-| `housenumber` | Checks if field value is house number. |
-| `postcode` | Checks if field value is post code. |
-| `match` | Checks if field value matches to field referenced by `data-validation-connected-field`. |
-| `unique` | Checks if field value is unique in amongst given references by `data-validation-unique-with` and `data-validation-unique-set`. |
+| Schema        | Description                                                                                                                    |
+| ---------     | -----------                                                                                                                    |
+| `required`    | Checks if field has value.                                                                                                     |
+| `email`       | Checks if field value is email.                                                                                                |
+| `regexp`      | Checks field value against regular expression defined in `data-validation-regexp`.                                             |
+| `phone`       | Checks if field value is phone number. Allows `+`, space and numbers.                                                          |
+| `numeric`     | Checks if field value is numeric. Allows decimals, signs, and scientific notation.                                             |
+| `number`      | Checks if field value is number.                                                                                               |
+| `name`        | Checks if field value is name, i.e. first or last name of person.                                                              |
+| `street`      | Checks if field value is street name.                                                                                          |
+| `housenumber` | Checks if field value is house number.                                                                                         |
+| `postcode`    | Checks if field value is post code.                                                                                            |
+| `match`       | Checks if field value matches to field referenced by `data-validation-connected-field`.                                        |
+| `unique`      | Checks if field value is unique in amongst given references by `data-validation-unique-with` and `data-validation-unique-set`. |
 
 ## Usage
 
 `iptools-jquery-validator` relies on namespaced data attributes such as
 
-| Attribute | Description |
-| --------- | ----------- |
-| `data-validation` | Comma-separated list of validation schemas to apply, e.g. `data-validation="required,phone"`. See [Supported validation schemas](#supported-validation-schemas). | 
-| `data-validation-trigger` | Event on which validation should be triggered. Only events emitted from actual control are considered. |
-| `data-validation-regexp` | Regular expression definition for fields with `regexp` validation schema. |
-| `data-validation-connected-field` | Name of the connected field for fields with `match` validation schema. |
-| `data-validation-unique-set` | Namespace within which to perform unique validation. |
-| `data-validation-unique-with` | IDs of controls amongst of which field should have unique value. |
-| `data-errormsg-<schema>` | Error message to be displayed in case validation fails, e.g. `data-errormsg-required="Name is required."`. |
+| Attribute                         | Description                                                                                                                                                                   |
+| ---------                         | -----------                                                                                                                                                                   |
+| `data-validation`                 | Comma-separated list of validation schemas to apply, e.g. `data-validation="required,phone"`. See [Supported validation schemas](#supported-validation-schemas).              |  
+| `data-validation-trigger`         | Event on which validation should be triggered. Only events emitted from actual control are considered.                                                                        |
+| `data-validation-regexp`          | Regular expression definition for fields with `regexp` validation schema.                                                                                                     |
+| `data-validation-connected-field` | Name of the connected field for fields with `match` validation schema.                                                                                                        |
+| `data-validation-unique-set`      | Namespace within which to perform unique validation.                                                                                                                          |
+| `data-validation-unique-with`     | IDs of controls amongst of which field should have unique value.                                                                                                              |
+| `data-errormsg-<schema>`          | Error message to be displayed in case validation fails, e.g. `data-errormsg-required="Name is required."`. See [Supported validation schemas](#supported-validation-schemas). |
 
 ### Options
 
 Following options (optional) can be used to initialise component:
 
-| Option | Description | Default |
-| ------ | ----------- | ------- |
-| `stopOnRequired` | Stop further validation if `required` validation schema fails | `false` |
-| `triggerOnSubmit` | Trigger validation event on submit | `true` |
-| `validateOnCustomEvent` | Trigger validation on custom event | `''` |
-| `errorPublishingMode` | Position of error message relative to erroneous field. Possible values: `insertInto`, `insertAfter`, `insertBefore`, `appendToParent`, `prependToParent` | `appendToParent` |
-| `errorMsgBoxID` | HTML Element ID holding error messages. Corresponds to `errorPublishingMode: 'insertInto'` | `null` |
-| `errorClass` | CSS class added to erroneous fields, error message and error class subscribers | `error` |
-| `boxAnimationMode` | Animation strategy applied to errors. Possible values: `default`, `fade`, `slide` | `default` (show/hide) |
-| `animationDuration` | Duration of boc animation in ms | `500` |
-| `wipeTargets` | Third party elements (e.g. errors) to be removed from DOM on validation | `null` |
+| Option                  | Description                                                                                                                                              | Default               |
+| ------                  | -----------                                                                                                                                              | -------               |
+| `stopOnRequired`        | Stop further validation if `required` validation schema fails                                                                                            | `false`               |
+| `triggerOnSubmit`       | Trigger validation event on submit                                                                                                                       | `true`                |
+| `validateOnCustomEvent` | Trigger validation on custom event                                                                                                                       | `''`                  |
+| `errorPublishingMode`   | Position of error message relative to erroneous field. Possible values: `insertInto`, `insertAfter`, `insertBefore`, `appendToParent`, `prependToParent` | `appendToParent`      |
+| `errorMsgBoxID`         | HTML Element ID holding error messages. Corresponds to `errorPublishingMode: 'insertInto'`                                                               | `null`                |
+| `errorClass`            | CSS class added to erroneous fields, error message and error class subscribers                                                                           | `error`               |
+| `boxAnimationMode`      | Animation strategy applied to errors. Possible values: `default`, `fade`, `slide`                                                                        | `default` (show/hide) |
+| `animationDuration`     | Duration of boc animation in ms                                                                                                                          | `500`                 |
+| `wipeTargets`           | Third party elements (e.g. errors) to be removed from DOM on validation                                                                                  | `null`                |
 
 ## Example
 
