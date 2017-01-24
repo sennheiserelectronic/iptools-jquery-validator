@@ -89,7 +89,7 @@
       });
 
       it('expected to return true on subdomain', function() {
-        return expect(object.data(pluginName)._isValidEmail('test.of.dotted.notation@subsubdomain.subdomain.test.international')).to.be.ok;
+        return expect(object.data(pluginName)._isValidEmail('dotted.username@sub.subdomain.test.de')).to.be.ok;
       });
 
     });
