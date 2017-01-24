@@ -12,7 +12,9 @@
   var dataAttr = {
     connectedField: 'validation-connected-field',
     errorClassSubscribers: 'validation-error-class-subscribers',
-    regExp: 'validation-regexp'
+    regExp: 'validation-regexp',
+    uniqueWith: 'validation-unique-with',
+    uniqueSet: 'validation-unique-set'
   };
 
   /*
@@ -201,24 +203,31 @@
       var self = this;
 
       var unique = true;
-      var references = $field.attr('data-validation-unique-with').split(',');
       var value = $field.val();
       var memberFields = [];
-      for (var i = 0, l = references.length, selector; i < l; i++) {
-        selector = '#' + references[i];
-        value += $(selector).val();
-        memberFields.push(selector);
+
+      var references = $field.data(dataAttr.uniqueWith);
+      if (references) {
+        references = references.split(',');
+        for (var i = 0, l = references.length, selector; i < l; i++) {
+          selector = '#' + references[i];
+          value += $(selector).val();
+          memberFields.push(selector);
+        }
       }
-      var set = $field.attr('data-validation-unique-set');
+      var set = $field.data(dataAttr.uniqueSet);
       var $fields = this.$element
-        .find('input[type=text][data-validation-unique-set=' + set + ']')
+        .find('input[type=text][data-' + dataAttr.uniqueSet +  '=' + set + ']')
         .not($field)
         .not(memberFields.join(' '));
       $fields.each(function() {
-        var subReferences = $(this).attr('data-validation-unique-with').split(',');
         var subValue = self._getElementValue($(this));
-        for (var i = 0, l = subReferences.length; i < l; i++) {
-          subValue += $('#' + subReferences[i]).val();
+        var subReferences = $(this).data(dataAttr.uniqueWith);
+        if (subReferences) {
+          subReferences = subReferences.split(',');
+          for (var i = 0, l = subReferences.length; i < l; i++) {
+            subValue += $('#' + subReferences[i]).val();
+          }
         }
         if (subValue === value) {
           unique = false;
