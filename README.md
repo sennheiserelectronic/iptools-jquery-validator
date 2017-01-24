@@ -34,7 +34,7 @@ jQuery form validation plugin.
 | `data-validation-regexp`          | Regular expression definition for fields with `regexp` validation schema.                                                                                                     |
 | `data-validation-connected-field` | Name of the connected field for fields with `match` validation schema.                                                                                                        |
 | `data-validation-unique-set`      | Namespace within which to perform unique validation.                                                                                                                          |
-| `data-validation-unique-with`     | IDs of controls amongst of which field should have unique value.                                                                                                              |
+| `data-validation-unique-with`     | ID of field, value of which, in combination with current field's value, makes up unique value to be validated, e.g. forename + surname.                                       |
 | `data-errormsg-<schema>`          | Error message to be displayed in case validation fails, e.g. `data-errormsg-required="Name is required."`. See [Supported validation schemas](#supported-validation-schemas). |
 
 ### Options
