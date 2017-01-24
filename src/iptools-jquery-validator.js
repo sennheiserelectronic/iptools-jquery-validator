@@ -460,7 +460,7 @@
           if (typeof scope === undefined || $(field).parents('#' + scope).length === 0) {
             continue;
           }
-          validationTypes = $skipper.data(dataAttr.skip)
+          validationTypes = $skipper.data(dataAttr.skip);
           if (validationTypes) {
             validationTypes = validationTypes.split(',');
             for (var j = 0, k = validationTypes.length; j < k; j++) {
