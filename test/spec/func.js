@@ -158,5 +158,38 @@
 
     });
 
+    describe('_isUnique', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator(config);
+      });
+
+      afterEach(function() {
+        object.data(pluginName)._removeAllPublishedErrors();
+        object.data(pluginName).destroy();
+      });
+
+      context('when unique field matches another field in set', function() {
+        it('expected to render error', function() {
+          object.find('input[name=nickname]').val('iptools');
+          object.find('input[name=username]').val('iptools').trigger('change');
+          var expectation = object.find('.' + config.errorClass).text();
+          return expect(expectation).to.include('Username should be unique.');
+        });
+      });
+
+      context('when unique field combined with another field matches field in set', function() {
+        it('expected to render error', function() {
+          object.find('input[name=husbands_forename]').val('Interactive');
+          object.find('input[name=husbands_surname]').val('Pioneer');
+          object.find('input[name=forename]').val('Interactive');
+          object.find('input[name=surname]').val('Pioneer').trigger('change');
+          var expectation = object.find('.' + config.errorClass).text();
+          return expect(expectation).to.include('Name should be unique.');
+        });
+      });
+
+    });
+
   });
 })();
