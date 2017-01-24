@@ -385,5 +385,78 @@
 
     });
 
+    describe('_isValidStreet', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to return true on two space-separated words', function() {
+        return expect(object.data(pluginName)._isValidStreet('Super Highway')).to.be.ok;
+      });
+
+      it('expected to return true on single word', function() {
+        return expect(object.data(pluginName)._isValidStreet('Friedensallee')).to.be.ok;
+      });
+
+      it('expected to return true on single word with number', function() {
+        return expect(object.data(pluginName)._isValidStreet('Belvedereallee 5')).to.be.ok;
+      });
+
+      context('expected to return true on string with (special) character(s)', function() {
+
+        it('ß', function() {
+          return expect(object.data(pluginName)._isValidStreet('Meßberg')).to.be.ok;
+        });
+
+        it('Ü', function() {
+          return expect(object.data(pluginName)._isValidStreet('Überseequartier')).to.be.ok;
+        });
+
+        it('ü', function() {
+          return expect(object.data(pluginName)._isValidStreet('Neumühlen')).to.be.ok;
+        });
+
+        it('Öö', function() {
+          return expect(object.data(pluginName)._isValidStreet('Övelgönne')).to.be.ok;
+        });
+
+        it('ä', function() {
+          return expect(object.data(pluginName)._isValidStreet('HafenCity Universität')).to.be.ok;
+        });
+
+        it('Ä', function() {
+          return expect(object.data(pluginName)._isValidStreet('HAFENCITY UNIVERSITÄT')).to.be.ok;
+        });
+
+        it('&', function() {
+          return expect(object.data(pluginName)._isValidStreet('Planten & Blomen')).to.be.ok;
+        });
+
+        it('"', function() {
+          return expect(object.data(pluginName)._isValidStreet('"Planten und Blomen"')).to.be.ok;
+        });
+
+        it(',', function() {
+          return expect(object.data(pluginName)._isValidStreet('Ballindamm, Jungfernstieg')).to.be.ok;
+        });
+
+        it('.-', function() {
+          return expect(object.data(pluginName)._isValidStreet('Hartwig-Hesse-Str. 3')).to.be.ok;
+        });
+
+        it('\'', function() {
+          return expect(object.data(pluginName)._isValidStreet('Docklands \'Fischereihafen\'')).to.be.ok;
+        });
+
+      });
+
+    });
+
+
   });
 })();
