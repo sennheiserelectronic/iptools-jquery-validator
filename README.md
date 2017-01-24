@@ -79,4 +79,5 @@ Following options (optional) can be used to initialise component:
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licence
-Copyright © 2016 Interactive Pioneers GmbH. Licenced under [GPL-3](LICENSE).
+
+Copyright © 2016, 2017 Interactive Pioneers GmbH. Licenced under [GPL-3](LICENSE).
