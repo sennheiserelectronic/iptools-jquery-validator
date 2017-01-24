@@ -14,7 +14,11 @@
     errorClassSubscribers: 'validation-error-class-subscribers',
     regExp: 'validation-regexp',
     uniqueWith: 'validation-unique-with',
-    uniqueSet: 'validation-unique-set'
+    uniqueSet: 'validation-unique-set',
+    trigger: 'validation-trigger',
+    skip: 'validation-skip',
+    skipScope: 'validation-skip-scope',
+    trim: 'validation-trim'
   };
 
   /*
@@ -266,7 +270,7 @@
      * @returns {string} value of the jQuery element
      */
     _getElementValue: function($field) {
-      return $field.attr('data-validation-trim') === 'true' ? $.trim($field.val()) : $field.val();
+      return $field.data(dataAttr.trim) === 'true' ? $.trim($field.val()) : $field.val();
     },
 
     /**
@@ -430,7 +434,7 @@
         return false;
       }
       var $field = $(field);
-      var required = $field.attr('data-validation').indexOf('required') !== -1;
+      var required = $field.data('validation').indexOf('required') !== -1;
       var value = $field.val();
       return required || (value && value.length > 0);
 
@@ -448,20 +452,21 @@
       if ($(field).prop('disabled')) {
         return true;
       }
-      var skipperIdentAttribute = 'data-validation-skip';
-      var skipperScopeAttribute = 'data-validation-skip-scope';
-      var skippers = this.$element.find('*[' + skipperIdentAttribute + ']:selected');
+      var skippers = this.$element.find('*[data-' + dataAttr.skip + ']:selected');
       if (skippers.length > 0) {
         for (var i = 0, l = skippers.length, validationTypes, scope, $skipper; i < l; i++) {
           $skipper = $(skippers[i]);
-          scope = $skipper.attr(skipperScopeAttribute);
+          scope = $skipper.data(dataAttr.skipScope);
           if (typeof scope === undefined || $(field).parents('#' + scope).length === 0) {
             continue;
           }
-          validationTypes = $skipper.attr(skipperIdentAttribute).split(',');
-          for (var j = 0, k = validationTypes.length; j < k; j++) {
-            if (validationTypes[j] === validationType) {
-              return true;
+          validationTypes = $skipper.data(dataAttr.skip)
+          if (validationTypes) {
+            validationTypes = validationTypes.split(',');
+            for (var j = 0, k = validationTypes.length; j < k; j++) {
+              if (validationTypes[j] === validationType) {
+                return true;
+              }
             }
           }
         }
@@ -655,7 +660,7 @@
       var $fields = this._getValidationElements();
       $fields.each(function() {
         var $this = $(this);
-        if ($this.data('validation-trigger') === 'change') {
+        if ($this.data(dataAttr.trigger) === 'change') {
           $this.on('change' + '.' + self._name, function() {
             self._validateField(this);
           });
