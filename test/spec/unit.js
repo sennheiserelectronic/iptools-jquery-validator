@@ -154,7 +154,6 @@
 
     });
 
-
     describe('_isFilled', function() {
 
       beforeEach(function() {
