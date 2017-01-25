@@ -78,16 +78,30 @@
         });
 
         context('when form is filled in', function() {
+
           it('expected to return true', function() {
             return expect(object.data(pluginName).validate()).to.be.ok;
           });
+
+          it('expected to dispatch success event', function(done) {
+            object.on('success.iptValidator', done);
+            object.data(pluginName).validate();
+          });
+
         });
 
         context('when form is empty', function() {
+
           it('expected to return false', function() {
             object.find('input[type=email]').val('');
             return expect(object.data(pluginName).validate()).to.not.be.ok;
           });
+
+          it('expected to dispatch error event', function(done) {
+            object.on('error.iptValidator', done);
+            object.data(pluginName).validate();
+          });
+
         });
 
       });

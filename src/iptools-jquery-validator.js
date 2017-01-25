@@ -612,6 +612,11 @@
 
     },
 
+    _dispatch: function(status) {
+      var event = status ? 'success' : 'error';
+      $(this.element).trigger(this._getNamespacedEvent(event));
+    },
+
     /**
      * Validate all connected form fields with data-validation attribute.
      *
@@ -630,8 +635,11 @@
 
       self._hideMsgBoxIfEmpty();
 
-      return (self._errors.length === 0);
+      var status = self._errors.length === 0;
 
+      self._dispatch(status);
+
+      return status;
     },
 
     /**
