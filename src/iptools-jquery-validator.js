@@ -45,7 +45,7 @@
     errorPublishingMode: 'appendToParent',
     stopOnRequired: false,
     validateOnSubmit: true,
-    validateOnCustomEvent: '',
+    validateOnCustomEvent: null,
     wipeTargets: null
   };
 
@@ -652,7 +652,7 @@
         this.$element.on('submit' + '.' + this._name, null, this, this._handleFormSubmit);
       }
 
-      if (this.settings.validateOnCustomEvent !== '') {
+      if (this.settings.validateOnCustomEvent) {
         this.$element.on(this.settings.validateOnCustomEvent, function() {
           return self.validate();
         });
