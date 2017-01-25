@@ -65,26 +65,62 @@
 
     describe('validate', function() {
 
-      beforeEach(function() {
-        object = $('form').iptValidator(config);
-        object.find('input[type=email]').val('hello@interactive-pioneers.de');
-      });
+      context('when called directly', function() {
 
-      afterEach(function() {
-        object.find('input[type=email]').val('');
-      });
-
-      context('when form is filled in', function() {
-        it('expected to return true', function() {
-          return expect(object.data(pluginName).validate()).to.be.ok;
+        before(function() {
+          object = $('form').iptValidator(config);
+          object.find('input[type=email]').val('hello@interactive-pioneers.de');
         });
-      });
 
-      context('when form is empty', function() {
-        it('expected to return false', function() {
+        after(function() {
           object.find('input[type=email]').val('');
-          return expect(object.data(pluginName).validate()).to.not.be.ok;
+          object.data(pluginName).destroy();
         });
+
+        context('when form is filled in', function() {
+          it('expected to return true', function() {
+            return expect(object.data(pluginName).validate()).to.be.ok;
+          });
+        });
+
+        context('when form is empty', function() {
+          it('expected to return false', function() {
+            object.find('input[type=email]').val('');
+            return expect(object.data(pluginName).validate()).to.not.be.ok;
+          });
+        });
+
+      });
+
+      context('when custom event is triggered', function() {
+
+        before(function() {
+          config.validateOnCustomEvent = 'iptValidatorCustomEvent';
+          object = $('form').iptValidator(config);
+          object.find('input[type=email]').val('hello@interactive-pioneers.de');
+        });
+
+        after(function() {
+          config.validateOnCustomEvent = null;
+          object.find('input[type=email]').val('');
+          object.data(pluginName).destroy();
+        });
+
+        context('when form is filled in', function() {
+          it('expected to not publish errors', function() {
+            object.trigger(config.validateOnCustomEvent);
+            return expect(object.find('.' + config.errorClass)).to.have.lengthOf(0);
+          });
+        });
+
+        context('when form is empty', function() {
+          it('expected to publish errors', function() {
+            object.find('input[type=email]').val('');
+            object.trigger(config.validateOnCustomEvent);
+            return expect(object.find('.' + config.errorClass)).to.have.length.above(0);
+          });
+        });
+
       });
 
     });
