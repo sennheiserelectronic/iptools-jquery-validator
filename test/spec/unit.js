@@ -501,5 +501,21 @@
 
     });
 
+    describe('_getNamespacedEvent', function() {
+
+      beforeEach(function() {
+        object = $('form').iptValidator();
+      });
+
+      afterEach(function() {
+        object.data(pluginName).destroy();
+      });
+
+      it('expected to respond with namespaced event', function() {
+        return expect(object.data(pluginName)._getNamespacedEvent('success')).to.eql('success.iptValidator');
+      });
+
+    });
+
   });
 })();

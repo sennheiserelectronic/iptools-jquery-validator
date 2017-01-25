@@ -71,6 +71,16 @@
   IPTValidator.prototype = {
 
     /**
+     * Get event name namespaced by component name.
+     *
+     * @param {string} name - event name
+     * @returns {string} namespaced event name
+     */
+    _getNamespacedEvent: function(name) {
+      return name + '.' + pluginName;
+    },
+
+    /**
      * Checks if string is empty / contains nothing or only whitespace.
      *
      * @param {string} str
