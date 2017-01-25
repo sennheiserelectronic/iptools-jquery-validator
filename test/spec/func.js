@@ -18,7 +18,6 @@
     var object = null;
 
     describe('wipe', function() {
-
       beforeEach(function() {
         $('<div>').addClass(classes.wipeTarget).appendTo('form');
         object = $('form').iptValidator(config);
@@ -68,11 +67,26 @@
 
       beforeEach(function() {
         object = $('form').iptValidator(config);
+        object.find('input[type=email]').val('hello@interactive-pioneers.de');
       });
 
-      it('expected to return false', function() {
-        return expect(object.data(pluginName).validate()).to.not.be.ok;
+      afterEach(function() {
+        object.find('input[type=email]').val('');
       });
+
+      context('when form is filled in', function() {
+        it('expected to return true', function() {
+          return expect(object.data(pluginName).validate()).to.be.ok;
+        });
+      });
+
+      context('when form is empty', function() {
+        it('expected to return false', function() {
+          object.find('input[type=email]').val('');
+          return expect(object.data(pluginName).validate()).to.not.be.ok;
+        });
+      });
+
     });
 
     describe('submit', function() {
