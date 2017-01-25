@@ -44,7 +44,7 @@ Following options (optional) can be used to initialise component:
 | Option                  | Description                                                                                                                                              | Default               |
 | ------                  | -----------                                                                                                                                              | -------               |
 | `stopOnRequired`        | Stop further validation if `required` validation schema fails                                                                                            | `false`               |
-| `triggerOnSubmit`       | Trigger validation event on submit                                                                                                                       | `true`                |
+| `triggerOnSubmit`       | Trigger validation on submit                                                                                                                             | `true`                |
 | `validateOnCustomEvent` | Trigger validation on custom event                                                                                                                       | `null`                |
 | `errorPublishingMode`   | Position of error message relative to erroneous field. Possible values: `insertInto`, `insertAfter`, `insertBefore`, `appendToParent`, `prependToParent` | `appendToParent`      |
 | `errorMsgBoxID`         | HTML Element ID holding error messages. Corresponds to `errorPublishingMode: 'insertInto'`                                                               | `null`                |
