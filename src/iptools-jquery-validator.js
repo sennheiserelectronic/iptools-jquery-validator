@@ -10,6 +10,7 @@
   var pluginName = 'iptValidator';
 
   var dataAttr = {
+    errorMsg: 'validation-errormsg',
     connectedField: 'validation-connected-field',
     errorClassSubscribers: 'validation-error-class-subscribers',
     regExp: 'validation-regexp',
@@ -589,7 +590,7 @@
         }
 
         if (!ok) {
-          var msg = $field.data('errormsg-' + validationType);
+          var msg = $field.data(dataAttr.errorMsg + '-' + validationType);
           self._publishError(field, msg);
           self._errors.push({field: field, error: msg});
           break validationIteration;

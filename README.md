@@ -27,15 +27,15 @@ jQuery form validation plugin.
 
 `iptools-jquery-validator` relies on namespaced data attributes such as
 
-| Attribute                         | Description                                                                                                                                                                   |
-| ---------                         | -----------                                                                                                                                                                   |
-| `data-validation`                 | Comma-separated list of validation schemas to apply, e.g. `data-validation="required,phone"`. See [Supported validation schemas](#supported-validation-schemas).              |  
-| `data-validation-trigger`         | Event on which validation should be triggered. Only events emitted from actual control are considered.                                                                        |
-| `data-validation-regexp`          | Regular expression definition for fields with `regexp` validation schema.                                                                                                     |
-| `data-validation-connected-field` | Name of the connected field for fields with `match` validation schema.                                                                                                        |
-| `data-validation-unique-set`      | Namespace within which to perform unique validation.                                                                                                                          |
-| `data-validation-unique-with`     | ID of field, value of which, in combination with current field's value, makes up unique value to be validated, e.g. forename + surname.                                       |
-| `data-errormsg-<schema>`          | Error message to be displayed in case validation fails, e.g. `data-errormsg-required="Name is required."`. See [Supported validation schemas](#supported-validation-schemas). |
+| Attribute                           | Description                                                                                                                                                                              |
+| ---------                           | -----------                                                                                                                                                                              |
+| `data-validation`                   | Comma-separated list of validation schemas to apply, e.g. `data-validation="required,phone"`. See [Supported validation schemas](#supported-validation-schemas).                         |  
+| `data-validation-trigger`           | Event on which validation should be triggered. Only events emitted from actual control are considered.                                                                                   |
+| `data-validation-regexp`            | Regular expression definition for fields with `regexp` validation schema.                                                                                                                |
+| `data-validation-connected-field`   | Name of the connected field for fields with `match` validation schema.                                                                                                                   |
+| `data-validation-unique-set`        | Namespace within which to perform unique validation.                                                                                                                                     |
+| `data-validation-unique-with`       | ID of field, value of which, in combination with current field's value, makes up unique value to be validated, e.g. forename + surname.                                                  |
+| `data-validation-errormsg-<schema>` | Error message to be displayed in case validation fails, e.g. `data-validation-errormsg-required="Name is required."`. See [Supported validation schemas](#supported-validation-schemas). |
 
 ### Options
 
@@ -57,7 +57,7 @@ Following options (optional) can be used to initialise component:
 
 ```html
 <form method="post" action="">
-  <input type="text" data-validation="required,email" data-validation-trigger="change" data-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
+  <input type="text" data-validation="required,email" data-validation-trigger="change" data-validation-errormsg-required="Dieses Feld ist ein Pflichtfeld." data-validation-errormsg-email="Bitte geben Sie eine gültige E-Mail-Adresse an.">
 </form>
 
 <script src="src/iptools-jquery-validator.js"></script>
