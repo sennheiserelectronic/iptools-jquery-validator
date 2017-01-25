@@ -15,10 +15,10 @@
   <p>Use the fields below to trigger validation on change.</p>
   <form action="#">
     <div>
-      <input type="email" data-validation="required,email,match[email_confirmation]" data-validation-trigger="change" data-errormsg-required="Email is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email" placeholder="Email">
+      <input type="email" data-validation="required,email,match[email_confirmation]" data-validation-trigger="change" data-validation-errormsg-required="Email is required" data-validation-errormsg-match="Email addresses are not matching" data-validation-errormsg-email="Please provide valid email address" name="email" placeholder="Email">
     </div>
     <div>
-      <input type="email" data-validation="required,email,match[email]" data-validation-trigger="change" data-errormsg-required="Email confirmation is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email_confirmation" placeholder="Email confirmation">
+      <input type="email" data-validation="required,email,match[email]" data-validation-trigger="change" data-validation-errormsg-required="Email confirmation is required" data-validation-errormsg-match="Email addresses are not matching" data-validation-errormsg-email="Please provide valid email address" name="email_confirmation" placeholder="Email confirmation">
     </div>
   </form>
   <script src="../bower_components/jquery/dist/jquery.min.js"></script>
