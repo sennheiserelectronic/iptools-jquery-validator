@@ -12,6 +12,14 @@
     <label class="email-label"></label>
     <input type="email" data-validation="required,email,match[email_confirmation]" data-validation-trigger="change" data-validation-error-class-subscribers=".email-label" data-errormsg-required="Email is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email">
     <input type="email" data-validation="required,email,match[email]" data-validation-trigger="change" data-validation-error-class-subscribers=".email-label" data-errormsg-required="Email confirmation is required" data-errormsg-match="Email addresses are not matching" data-errormsg-email="Please provide valid email address" name="email_confirmation">
+
+    <input type="text" name="nickname" id="nickname" data-validation-unique-set="username">
+    <input type="text" name="username" data-validation="unique" data-validation-trigger="change" data-errormsg-unique="Username should be unique." data-validation-unique-set="username">
+
+    <input type="text" name="husbands_forename" data-validation="unique" data-validation-trigger="change" data-validation-unique-set="name" data-validation-unique-with="js_husbands_surname" id="js_husbands_forename">
+    <input type="text" name="husbands_surname" data-validation="unique" data-validation-trigger="change" data-validation-unique-set="name" data-validation-unique-with="js_husbands_forename" id="js_husbands_surname">
+    <input type="text" name="forename" data-validation="unique" data-validation-trigger="change" data-errormsg-unique="Name should be unique." data-validation-unique-set="name" data-validation-unique-with="js_surname" id="js_forename">
+    <input type="text" name="surname" data-validation="unique" data-validation-trigger="change" data-errormsg-unique="Name should be unique." data-validation-unique-set="name" data-validation-unique-with="js_forename" id="js_surname">
   </form>
 
   <script src="../bower_components/jquery/dist/jquery.min.js"></script>
