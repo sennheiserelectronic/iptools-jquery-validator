@@ -60,7 +60,7 @@ Following events are dispatched on element that component was initialised on:
 | Event                  | Description                      |
 | ---------              | -----------                      |
 | `success.iptValidator` | Dispatched on validation success |  
-| `error.iptValidator`   | Dispatched on validation failure |  
+| `failure.iptValidator` | Dispatched on validation failure |  
 
 ## Example
 
