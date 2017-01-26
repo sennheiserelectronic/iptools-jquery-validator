@@ -612,9 +612,8 @@
 
     },
 
-    _dispatch: function(status) {
-      var event = status ? 'success' : 'error';
-      $(this.element).trigger(this._getNamespacedEvent(event));
+    _dispatch: function(eventName) {
+      this.$element.trigger(this._getNamespacedEvent(eventName));
     },
 
     /**
@@ -624,22 +623,22 @@
      */
     validate: function() {
 
-      var self = this;
-      self._clearErrors();
-      self._removeAllPublishedErrors();
+      this._clearErrors();
+      this._removeAllPublishedErrors();
 
+      var self = this;
       var $fields = self._getValidationElements();
       $fields.each(function() {
         self._validateField(this);
       });
 
-      self._hideMsgBoxIfEmpty();
+      this._hideMsgBoxIfEmpty();
 
-      var status = self._errors.length === 0;
+      var valid = (this._errors.length === 0);
 
-      self._dispatch(status);
+      this._dispatch(valid ? 'success' : 'failure');
 
-      return status;
+      return valid;
     },
 
     /**
@@ -650,8 +649,7 @@
      */
     _handleFormSubmit: function(event) {
 
-      var self = event.data;
-      if (!self.validate()) {
+      if (!event.data.validate()) {
         return false;
       }
 

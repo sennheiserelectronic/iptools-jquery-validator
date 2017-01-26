@@ -67,13 +67,14 @@
 
       context('when called directly', function() {
 
-        before(function() {
+        beforeEach(function() {
           object = $('form').iptValidator(config);
           object.find('input[type=email]').val('hello@interactive-pioneers.de');
         });
 
-        after(function() {
+        afterEach(function() {
           object.find('input[type=email]').val('');
+          object.off('failure.iptValidator success.iptValidator');
           object.data(pluginName).destroy();
         });
 
@@ -84,8 +85,9 @@
           });
 
           it('expected to dispatch success event', function(done) {
-            object.on('success.iptValidator', done);
-            object.data(pluginName).validate();
+            object.on('success.iptValidator', function() {
+              done();
+            }).data(pluginName).validate();
           });
 
         });
@@ -97,9 +99,11 @@
             return expect(object.data(pluginName).validate()).to.not.be.ok;
           });
 
-          it('expected to dispatch error event', function(done) {
-            object.on('error.iptValidator', done);
-            object.data(pluginName).validate();
+          it('expected to dispatch failure event', function(done) {
+            object.find('input[type=email]').val('');
+            object.on('failure.iptValidator', function() {
+              done();
+            }).data(pluginName).validate();
           });
 
         });
@@ -141,8 +145,12 @@
 
     describe('submit', function() {
 
-      beforeEach(function() {
+      before(function() {
         object = $('form').iptValidator(config);
+      });
+
+      after(function() {
+        object.data(pluginName).destroy();
       });
 
       it('expected to return false', function() {
