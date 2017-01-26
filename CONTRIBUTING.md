@@ -21,5 +21,5 @@
 Following tasks are there to help with development:
 
 - `npm start` (aka `npm run grunt watch:bdd`) listens to tests and source, reruns tests
-- `npm run grunt qa` run QA task that includes tests and JSHint
+- `npm test` (aka `npm run grunt qa`) run QA task that includes tests and JSHint
 - `npm run grunt build` minify source to dist/
