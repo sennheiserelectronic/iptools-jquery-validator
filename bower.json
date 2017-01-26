@@ -13,8 +13,6 @@
     "jquery": ">=1.11.3 <4.0.0"
   },
   "devDependencies": {
-    "mocha": "~3.2.0",
-    "chai": "~3.5.0"
   },
   "authors": [
     "Interactive Pioneers GmbH <hello@interactive-pioneers.de>"

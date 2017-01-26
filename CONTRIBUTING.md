@@ -20,6 +20,6 @@
 
 Following tasks are there to help with development:
 
-- `grunt watch:bdd` listens to tests and source, reruns tests
-- `grunt qa` run QA task that includes tests and JSHint
-- `grunt build` minify source to dist/
+- `npm run grunt watch:bdd` listens to tests and source, reruns tests
+- `npm run grunt qa` run QA task that includes tests and JSHint
+- `npm run grunt build` minify source to dist/

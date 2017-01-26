@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Mocha Spec Runner</title>
-  <link rel="stylesheet" href="../bower_components/mocha/mocha.css">
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 </head>
 <body>
   <div id="mocha"></div>
@@ -22,9 +22,9 @@
     <input type="text" name="surname" data-validation="unique" data-validation-trigger="change" data-validation-errormsg-unique="Name should be unique." data-validation-unique-set="name" data-validation-unique-with="js_forename" id="js_surname">
   </form>
 
-  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="../bower_components/mocha/mocha.js"></script>
-  <script src="../bower_components/chai/chai.js"></script>
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
   <script>mocha.setup('bdd');</script>
   <script>var expect = chai.expect;</script>
   <script src="spec/unit.js"></script>
