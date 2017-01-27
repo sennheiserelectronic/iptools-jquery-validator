@@ -71,6 +71,16 @@
   IPTValidator.prototype = {
 
     /**
+     * Get event name namespaced by component name.
+     *
+     * @param {string} name - event name
+     * @returns {string} namespaced event name
+     */
+    _getNamespacedEvent: function(name) {
+      return name + '.' + pluginName;
+    },
+
+    /**
      * Checks if string is empty / contains nothing or only whitespace.
      *
      * @param {string} str
@@ -602,6 +612,10 @@
 
     },
 
+    _dispatch: function(eventName) {
+      this.$element.trigger(this._getNamespacedEvent(eventName));
+    },
+
     /**
      * Validate all connected form fields with data-validation attribute.
      *
@@ -609,19 +623,22 @@
      */
     validate: function() {
 
-      var self = this;
-      self._clearErrors();
-      self._removeAllPublishedErrors();
+      this._clearErrors();
+      this._removeAllPublishedErrors();
 
+      var self = this;
       var $fields = self._getValidationElements();
       $fields.each(function() {
         self._validateField(this);
       });
 
-      self._hideMsgBoxIfEmpty();
+      this._hideMsgBoxIfEmpty();
 
-      return (self._errors.length === 0);
+      var valid = (this._errors.length === 0);
 
+      this._dispatch(valid ? 'success' : 'failure');
+
+      return valid;
     },
 
     /**
@@ -632,8 +649,7 @@
      */
     _handleFormSubmit: function(event) {
 
-      var self = event.data;
-      if (!self.validate()) {
+      if (!event.data.validate()) {
         return false;
       }
 

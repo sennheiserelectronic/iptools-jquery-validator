@@ -55,9 +55,9 @@
     "url": "https://github.com/interactive-pioneers/iptools-jquery-validator.git"
   },
   "scripts": {
-    "test": "npm run grunt travis --verbose",
-    "start": "npm run grunt watch:bdd",
-    "grunt": "grunt"
+    "grunt": "grunt",
+    "test": "grunt travis --verbose",
+    "start": "grunt watch:bdd"
   },
   "keywords": [
     "javascript",

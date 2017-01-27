@@ -53,6 +53,15 @@ Following options (optional) can be used to initialise component:
 | `animationDuration`     | Duration of boc animation in ms                                                                                                                          | `500`                 |
 | `wipeTargets`           | Third party elements (e.g. errors) to be removed from DOM on validation                                                                                  | `null`                |
 
+### Events
+
+Following events are dispatched on element that component was initialised on:
+
+| Event                  | Description                      |
+| ---------              | -----------                      |
+| `success.iptValidator` | Dispatched on validation success |  
+| `failure.iptValidator` | Dispatched on validation failure |  
+
 ## Example
 
 ```html
