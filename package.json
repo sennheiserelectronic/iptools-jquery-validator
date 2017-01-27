@@ -56,8 +56,8 @@
   },
   "scripts": {
     "grunt": "grunt",
-    "test": "grunt travis --verbose",
-    "start": "grunt watch:bdd"
+    "test": "npm run grunt travis --verbose",
+    "start": "npm run grunt watch:bdd"
   },
   "keywords": [
     "javascript",
