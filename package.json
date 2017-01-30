@@ -65,5 +65,11 @@
     "form",
     "validation",
     "jquery"
+  ],
+  "files": [
+    "*.md",
+    "LICENSE",
+    "src",
+    "dist"
   ]
 }
