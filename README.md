@@ -73,7 +73,7 @@ Following events are dispatched on element that component was initialised on:
 <script type="text/javascript">
   $(document).ready(function() {
     $('form').iptValidator({
-      triggerOnSubmit: true,
+      validateOnSubmit: true,
       stopOnRequired: false,
       errorPublishingMode: 'insertAfter',
       errorMsgBoxID: null,
