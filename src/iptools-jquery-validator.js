@@ -463,17 +463,24 @@
       if ($(field).prop('disabled')) {
         return true;
       }
+
       var skippers = this.$element.find('*[data-' + dataAttr.skip + ']:selected');
-      if (skippers.length > 0) {
-        for (var i = 0, l = skippers.length, validationTypes, scope, $skipper; i < l; i++) {
-          $skipper = $(skippers[i]);
-          scope = $skipper.data(dataAttr.skipScope);
-          if (typeof scope === undefined || $(field).parents('#' + scope).length === 0) {
-            continue;
-          }
-          validationTypes = $skipper.data(dataAttr.skip);
-          if (validationTypes) {
-            validationTypes = validationTypes.split(',');
+      if (skippers.length === 0) {
+        return false;
+      }
+
+      for (var i = 0, l = skippers.length, validationTypes, scope, $skipper, scopes; i < l; i++) {
+        $skipper = $(skippers[i]);
+        validationTypes = $skipper.data(dataAttr.skip).split(',');
+
+        scope = $skipper.data(dataAttr.skipScope);
+        if (typeof scope === undefined || validationTypes.length === 0) {
+          continue;
+        }
+        scopes = scope.split(',');
+
+        for (var x = 0; x < scopes.length; x++) {
+          if (field.id === scopes[x] || $(field).parents('#' + scopes[x]).length > 0) {
             for (var j = 0, k = validationTypes.length; j < k; j++) {
               if (validationTypes[j] === validationType) {
                 return true;
@@ -482,8 +489,8 @@
           }
         }
       }
-      return false;
 
+      return false;
     },
 
     /**
